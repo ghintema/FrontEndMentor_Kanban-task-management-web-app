@@ -1,12 +1,18 @@
 import React from 'react';
+import { Link } from 'react-router-dom'
+import { useParams } from 'react-router'
 
 // Here is rendered what is showen when the selected Board doesn't not have any columns to be rendered.
 // Message
 function EmptyBoard() {
+
+    const { boardId } = useParams() 
+    const linkToEditBoard = boardId && /[0-9]/.test(boardId) ? `${boardId}/EditBoardForm` : '/EditBoardForm'
+
     return ( 
         <div className='emptyBoardContainer'>
             <p>This board is empty. Create a new column to get started.</p>
-            <button className='noneFormButton createNewButton'>+ Add new Column</button>
+            <Link className='noneFormButton createNewButton' to={linkToEditBoard}>+ Add new Column</Link>
         </div>
      );
 }

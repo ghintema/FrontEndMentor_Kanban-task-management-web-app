@@ -1,10 +1,11 @@
 import React, { useEffect } from 'react';
 import ReactDOM from 'react-dom'
-import { BrowserRouter as Router, Route } from 'react-router-dom'
+import { BrowserRouter as Router, Route, useHistory } from 'react-router-dom'
 import './App.css';
 import { Navigation } from '../components/Navigation.js';
 import { NewBoardForm } from '../components/NewBoardForm.js'
 import { NewTaskForm } from '../components/NewTaskForm.js'
+import { EditBoardForm } from '../components/EditBoardForm.js'
 import { Logo } from '../components/Logo.js';
 import { BoardHeader } from '../components/BoardHeader.js'
 import { Board } from '../features/boards/Board'
@@ -14,7 +15,7 @@ function App() {
     // const history = useHistory();
 
     // useEffect(() => {
-    //   history.push();
+    //   history.push({ pathname: '/'});
     // },[])
 
     return (
@@ -28,7 +29,9 @@ function App() {
           </header>
           <main >
             <aside >
-              <Navigation />
+              <Route path="/:boardId?">
+                <Navigation />
+              </Route>
             </aside>
             <section>
               <Route path="/:boardId?">
@@ -41,12 +44,15 @@ function App() {
         <Route path="/:boardId?/NewBoardForm">
           <NewBoardForm />
         </Route>
-        <Route path="/NewTaskForm">
+        <Route path="/:boardId/EditBoardForm">
+          <EditBoardForm />
+        </Route>
+        <Route path="/:boardId/NewTaskForm">
           <NewTaskForm />
         </Route>
-        <Route path="/*?/*?/EditTaskForm/:id?">
-            <NewTaskForm />
-        </Route>
+        {/* <Route path="/:boardId/:taskId/EditTaskForm">
+          <EditTaskForm />
+        </Route> */}
       </Router>
       );
 }

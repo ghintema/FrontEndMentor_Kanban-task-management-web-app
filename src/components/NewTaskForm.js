@@ -1,16 +1,22 @@
 import React from 'react';
 import { useState } from 'react';
+import { useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
+import { selectBoards } from '../features/boards/boardsSlice';
 import { addCardToCards } from '../features/cards/cardsSlice'
 import cross from '../assets/cross-icon.svg';
 
 function NewTaskForm() {
 
-
+    const { boardId } = useParams() 
     const [nameForNewTask, setNameForNewTask]               = useState('')
     const [descriptionForNewTask, setDescriptionForNewTask] = useState('')
     const [subTasks, setSubTasks]                           = useState([{name: 'First...',  id:Math.floor(Math.random()*1000) },
                                                                         {name: 'Second...', id:Math.floor(Math.random()*1000) }]);
     const [status, setStatus]                               = useState()
+    
+    const allBoards = useSelector(selectBoards)
+
 
 
     const changeSubTasks = (e) => {
@@ -35,6 +41,7 @@ function NewTaskForm() {
 
     const createTheTask = () => {
 
+        // editing the possible new board name?
     }
 
 

@@ -1,7 +1,7 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
 import { selectBoards } from '../features/boards/boardsSlice'
-import { Link, NavLink } from 'react-router-dom'
+import { Link, NavLink, useParams } from 'react-router-dom'
 import { LinkToBoard } from './LinkToBoard'
 import iconBoard from '../assets/board-icon.svg'
 // List of Links for every entry in 'boards'
@@ -14,6 +14,8 @@ function Navigation() {
 
     const allBoards = useSelector(selectBoards);
     const numOfBoards = Object.keys(allBoards).length;
+    const { boardId } = useParams() 
+    const linkToCreateNewBoard = /[0-9]/.test(boardId) ? `${boardId}/NewBoardForm` : '/NewBoardForm'
 
 
     return ( 
@@ -23,11 +25,15 @@ function Navigation() {
             {Object.values(allBoards).map((board) => {
                 return  <li className='navItem' key={board.id}> 
                             <img src={iconBoard} className='iconBoard' key={board.id + 2} alt=''/>
-                            <NavLink className='linkToExistingBoard' to={board.id} key={board.id + 3}>{board.name}</NavLink> 
+                            <NavLink className='linkToExistingBoard' to={board.id} key={board.id + 3}>
+                                {board.name}
+                            </NavLink> 
                         </li>
             })}
             <li className='navItem'>
-                <NavLink className='linkToCreateNewBoard' to='NewBoardForm'>+ Create new board</NavLink>
+                <NavLink className='linkToCreateNewBoard' to= {linkToCreateNewBoard}>
+                            + Create new board
+                </NavLink>
             </li>
             </ul>
             

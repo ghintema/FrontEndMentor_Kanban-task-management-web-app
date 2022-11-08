@@ -1,79 +1,70 @@
-import React, { useState } from 'react';
-import { addBoardToBoards } from '../features/boards/boardsSlice';
-import { addColumnToColumns } from '../features/columns/columnsSlice';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useEffect } from 'react'
+import { useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { useParams, useHistory } from 'react-router';
+import { selectBoards } from '../features/boards/boardsSlice'
+import { selectColumns } from '../features/columns/columnsSlice'
 import cross from '../assets/cross-icon.svg';
-import { useHistory } from 'react-router';
 
-//first, collect all necessary data in lokal states. Those are: Name of the board and name of all columns in that board.
-//second, on submit, dispatch all actions to create the board and all the new columns
 
-function NewBoardForm() {
+function EditBoardForm() {
 
+    const { boardId } = useParams();
+    const allBoards = useSelector(selectBoards);
+    const allColumns = useSelector(selectColumns);
     const dispatch = useDispatch();
     const history = useHistory();
-    const [nameForNewBoard, setNameForNewBoard] =       useState('New Board');
-    const [namesForNewColumns, setNamesForNewColumns] = useState([{name: 'ToDo',  id:Math.floor(Math.random()*1000) },
-                                                                  {name: 'Doing', id:Math.floor(Math.random()*1000) },
-                                                                  {name: 'Done',  id:Math.floor(Math.random()*1000) }]);
+    const [nameForBoard, setNameForBoard] =       useState('');
+    const [namesForColumns, setNamesForColumns] = useState([]);
+
+
+    // initializing the local states with the values of the selected board to pre-fill the form
+    console.log(allBoards)
+
+
+    useEffect(() => {
+        setNameForBoard(allBoards[boardId].name);
+
+        // iterating over all columns of the selected board to collect the id and name
+        let initialColumns = [];
+        allBoards[boardId].columnIds.map(id => initialColumns.push({name:allColumns[id].name , id: id}) )
+        setNamesForColumns(initialColumns)
+
+    },[boardId])
     
+
 
     const changeColumnName = (e) => {
         const index = +e.target.id                   // the + in front of e.target.id converts string to number
-        const columnNames = [...namesForNewColumns]; // copy to prevent state-mutation
+        const columnNames = [...namesForColumns]; // copy to prevent state-mutation
         columnNames[index].name = e.target.value;    // change the indexed element to new value
-        setNamesForNewColumns([...columnNames]);     // set all new names to the state
+        setNamesForColumns([...columnNames]);     // set all new names to the state
     }
 
     const removeColumnName = (e) => {
         const index = +e.target.id
-        const columnNames = [...namesForNewColumns]; // copy to prevent state-mutation
+        const columnNames = [...namesForColumns]; // copy to prevent state-mutation
         columnNames.splice(index,1)                  // remove the indexed element from the array 
-        setNamesForNewColumns([...columnNames]);     // set all new names to the state
+        setNamesForColumns([...columnNames]);     // set all new names to the state
     }
 
     const addColumnName =  () => {
-        const columnNames = [...namesForNewColumns]; // copy to prevent state-mutation
+        const columnNames = [...namesForColumns]; // copy to prevent state-mutation
         columnNames.push({name: 'new', id: Math.floor(Math.random()*1000) });                   // add new empty entry
-        setNamesForNewColumns([...columnNames]);     // set all new names to the state
+        setNamesForColumns([...columnNames]);     // set all new names to the state
     }
-    
-    
-    const createTheBoard = (e) => {
-        e.preventDefault()
-        console.log('onSubmit invoked')
 
-        // create the new Board
-        dispatch(addBoardToBoards({name:nameForNewBoard, id:Math.floor(Math.random()*1000).toString(), columnIds: namesForNewColumns.map(el => el.id)}))
-        // dispatch({ type: 'boards/addBoardToBoards', payload:{id:'7896543213', name:'öoihwiehgldhfkjds'}});
 
-        // create all the new columns
-        namesForNewColumns.forEach((column) => {
-            dispatch(addColumnToColumns({name: column.name, id: column.id.toString(), cardIds:[]}))
-        })
 
-        // reset the form
-        setNamesForNewColumns([ {name: 'ToDo',  id:Math.floor(Math.random()*1000) },
-                                {name: 'Doing', id:Math.floor(Math.random()*1000) },
-                                {name: 'Done',  id:Math.floor(Math.random()*1000) }])
 
-        // close the form
+    const storeChanges = () => {
 
-        history.goBack();
     }
 
     const closeTheForm = (e) => {
         history.goBack()
     }
 
-
-    // IMPORTANT: Make sure that:
-        // the keys of the input-fields are unique in the list, constant over re-rendering and independent of the list-position. 
-        // 1.) Every input-field has its unique key all over the Component, even if it chances the position in the list.  
-        // 2.) that one and the same inputfield has a constant key assigned, even if the same keys to the input field on every render. Otherwise it is going to loos focos.
-        // the key doesn't change on re-render (does not be changing random-number) and does not depend on sequenz, 
-
-        // It's also important NOT to submit the form to prevent reload of the page.
     return ( 
         <div className='formBackground' >
             <div className='formContainer'>
@@ -85,12 +76,12 @@ function NewBoardForm() {
                         key = {33} //{Math.floor(Math.random()*1000)}
                         type='text'
                         id='boardNameInput'
-                        value={nameForNewBoard}
-                        onChange={(e) => setNameForNewBoard(e.target.value)}
+                        value={nameForBoard}
+                        onChange={(e) => setNameForBoard(e.target.value)}
                     />
                     <label id='columnLabel'>Columns</label>
                     <ul>
-                        {namesForNewColumns.map((column, index) => {
+                        {namesForColumns.map((column, index) => {
                             return (
                                 <li key={column.id + 0}>
                                     <input
@@ -125,7 +116,7 @@ function NewBoardForm() {
                         className = "formButton createNewButton"
                         type = "button"
                         key = {Math.floor(Math.random()*1000)}
-                        onClick={createTheBoard}>
+                        onClick={storeChanges}>
                         Create the Board
                     </button>
                     <button 
@@ -139,7 +130,7 @@ function NewBoardForm() {
                 </form>
             </div>
         </div>
-     );
+        );
 }
 
-export {NewBoardForm};
+export {EditBoardForm};
