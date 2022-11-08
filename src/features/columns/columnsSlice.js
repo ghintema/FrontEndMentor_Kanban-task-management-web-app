@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-const initialState = {'456': {name:'column headline', id:'456', cardIds: ['']}}
+const initialState = {'456': {name:'column headline', id:'456', cardIds: ['123']}}
 
 // cardIds carrys all cards currently shown in this columns
 

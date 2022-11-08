@@ -42,12 +42,12 @@ function NewBoardForm() {
         console.log('onSubmit invoked')
 
         // create the new Board
-        dispatch(addBoardToBoards({name:nameForNewBoard, id:Math.floor(Math.random()*1000), columnIds: namesForNewColumns.map(el => el.id)}))
+        dispatch(addBoardToBoards({name:nameForNewBoard, id:Math.floor(Math.random()*1000).toString(), columnIds: namesForNewColumns.map(el => el.id)}))
         // dispatch({ type: 'boards/addBoardToBoards', payload:{id:'7896543213', name:'öoihwiehgldhfkjds'}});
 
         // create all the new columns
         namesForNewColumns.forEach((column) => {
-            dispatch(addColumnToColumns({name: column.name, id: column.id, cardIds:[]}))
+            dispatch(addColumnToColumns({name: column.name, id: column.id.toString(), cardIds:[]}))
         })
 
         // reset the form
@@ -74,7 +74,7 @@ function NewBoardForm() {
                 <h3 className='formTitle'>Define a new Board here</h3>
                 <form>
         	        
-                    <label>Name</label>
+                    <label for='boardNameInput'>Name</label>
                     <input 
                         key = {33} //{Math.floor(Math.random()*1000)}
                         type='text'
@@ -82,7 +82,7 @@ function NewBoardForm() {
                         value={nameForNewBoard}
                         onChange={(e) => setNameForNewBoard(e.target.value)}
                     />
-                    <label id='columLabel'>Columns</label>
+                    <label id='columnLabel'>Columns</label>
                     <ul>
                         {namesForNewColumns.map((column, index) => {
                             return (

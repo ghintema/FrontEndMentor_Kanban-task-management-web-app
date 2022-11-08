@@ -22,21 +22,23 @@ function App() {
         <div className='Container'>
           <header className='headerContainer'>
             <Logo />
-            <BoardHeader />
+            <Route path="/:boardId?">
+              <BoardHeader />
+            </Route>
           </header>
           <main >
             <aside >
               <Navigation />
             </aside>
             <section>
-              <Route path="/:id?">
+              <Route path="/:boardId?">
                 <Board />
               </Route>
             </section>
           </main>
         </div>
 
-        <Route path="/NewBoardForm">
+        <Route path="/:boardId?/NewBoardForm">
           <NewBoardForm />
         </Route>
         <Route path="/NewTaskForm">

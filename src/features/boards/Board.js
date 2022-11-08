@@ -13,15 +13,33 @@ import { EmptyBoard } from '../../components/EmptyBoard'
 function Board() {
 
     const allBoards = useSelector(selectBoards);
-    // const currentBoardsId = useParams()
-    // const columnsToBeRendered = allBoards[currentBoardsId].columnIds; // Array with Ids of all columns to be rendered 
-    // const boardIsEmpty = columnsToBeRendered.length == 0;
+    const { boardId } = useParams()
     
+    console.log(boardId)
+    console.log(allBoards[boardId])
+    console.log(typeof boardId === 'number')
+
+   
+
+    let columnsToBeRendered = []
+
+    if  (boardId && boardId.match(/[0-9]/)) {
+      
+         columnsToBeRendered = allBoards[boardId].columnIds // Array with Ids of all columns to be rendered    
+    }
+
+    console.log(columnsToBeRendered)
+
+    const boardIsEmpty = columnsToBeRendered.length === 0;
+    
+    console.log(columnsToBeRendered)
+    console.log(boardIsEmpty)
+
     return ( 
         <div className='boardContainer'>
-            {/* {boardIsEmpty ? <EmptyBoard /> :
-                columnsToBeRendered.map((column) => <Column id={column.id} key={column.id} />)
-            } */}
+            {boardIsEmpty ? <EmptyBoard /> :
+               columnsToBeRendered.map((id) => <Column id={id} key={id} />)
+            }
                 
                 
             
