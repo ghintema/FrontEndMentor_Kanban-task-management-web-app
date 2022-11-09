@@ -16,7 +16,7 @@ function BoardHeader() {
     // const currentBoardsName = allBoards[currentBoardsId].name;
 
 
-    let title = 'Choose a Board or create a new one'
+    let title = 'No Board selected'
 
     const boardIdPlausible = Object.keys(allBoards).includes(boardId);
 

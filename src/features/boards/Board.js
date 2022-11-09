@@ -41,21 +41,6 @@ function Board() {
              boardIsEmpty ? <EmptyBoard /> : (
              columnsToBeRendered.map((id) => <Column id={id} key={id} />)
              )}
-           
-           
-           
-            {/* {if (!boardSelected) {
-                <NoBoard /> 
-            } else if (boardIsEmpty) {
-                <EmptyBoard />
-              } else {
-                columnsToBeRendered.map((id) => <Column id={id} key={id} />)
-                // <Link className='linkToEditBoard'> </Link>
-              } 
-            }   */}
-            
-                
-                
             
         </div>
      );

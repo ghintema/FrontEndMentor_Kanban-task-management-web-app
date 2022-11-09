@@ -1,6 +1,14 @@
 import { createSlice } from '@reduxjs/toolkit'
 
-const initialState = {'123': {name:'card name', id:'123', columnId:'', boardColumnIds:[''], subTasks:{'321': {name: 'sub task', id:'321', status: 'open'}}}};
+const initialState = {'123': {name:'card name', 
+                              id:'123',
+                              description:'This is to be done', 
+                              columnId:'', 
+                              boardColumnIds:[''], 
+                              subTasks:{'321': 
+                                {name: 'sub task', 
+                                 id:'321', 
+                                 status: 'open'}}}};
 
 
 // every card has exactly and always ONE columnId (the one it is sittin on) but can have zero to whatever columnIds, wich are potential new target-columns insige the board. This is important as selection-options for a column change.

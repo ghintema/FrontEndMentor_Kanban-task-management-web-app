@@ -4,6 +4,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useParams, useHistory } from 'react-router';
 import { selectBoards } from '../features/boards/boardsSlice'
 import { selectColumns } from '../features/columns/columnsSlice'
+import { addBoardToBoards } from '../features/boards/boardsSlice';
+import { addColumnToColumns } from '../features/columns/columnsSlice';
 import cross from '../assets/cross-icon.svg';
 
 
@@ -19,9 +21,6 @@ function EditBoardForm() {
 
 
     // initializing the local states with the values of the selected board to pre-fill the form
-    console.log(allBoards)
-
-
     useEffect(() => {
         setNameForBoard(allBoards[boardId].name);
 
@@ -59,6 +58,15 @@ function EditBoardForm() {
 
     const storeChanges = () => {
 
+        // overriding the existing board with old id but new name and columnIds
+        dispatch(addBoardToBoards({name:nameForBoard, id: boardId, columnIds: namesForColumns.map(el => el.id)}))
+
+         // create all the new columns
+         namesForColumns.forEach((column) => {
+            dispatch(addColumnToColumns({name: column.name, id: column.id.toString(), cardIds:[]}))
+        })
+
+        history.goBack()
     }
 
     const closeTheForm = (e) => {
@@ -68,7 +76,7 @@ function EditBoardForm() {
     return ( 
         <div className='formBackground' >
             <div className='formContainer'>
-                <h3 className='formTitle'>Define a new Board here</h3>
+                <h3 className='formTitle'>Edit the Board here</h3>
                 <form>
         	        
                     <label for='boardNameInput'>Name</label>
@@ -117,7 +125,7 @@ function EditBoardForm() {
                         type = "button"
                         key = {Math.floor(Math.random()*1000)}
                         onClick={storeChanges}>
-                        Create the Board
+                        Save the Changes
                     </button>
                     <button 
                         className = "closingCrossButton closingFormButton"

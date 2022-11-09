@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-const initialState = {'456': {name:'column headline', id:'456', cardIds: ['123']}}
+const initialState = {'456': {name:'column headline', id:'456', cardIds: []}}
 
 // cardIds carrys all cards currently shown in this columns
 
@@ -17,8 +17,8 @@ export const columnsSlice = createSlice({
             delete columns[columnIdToDelete]
         },
         addCardIdToColumn(columns, action) {
-            const [ columnId, cardIds ] = action.payload;
-            columns[columnId].cardIds.push(cardIds)
+            const [ columnId, cardId ] = action.payload;
+            columns[columnId].cardIds.push(cardId)
         },
         removeCardIdFromColumn(columns, action) {
             const [ columnId, cardId ] = action.payload;

@@ -41,11 +41,14 @@ function NewBoardForm() {
     
     const createTheBoard = (e) => {
         e.preventDefault()
-        console.log('onSubmit invoked')
+
+        const newBoardsId = Math.floor(Math.random()*1000).toString();
 
         // create the new Board
-        dispatch(addBoardToBoards({name:nameForNewBoard, id:Math.floor(Math.random()*1000).toString(), columnIds: namesForNewColumns.map(el => el.id)}))
-        // dispatch({ type: 'boards/addBoardToBoards', payload:{id:'7896543213', name:'öoihwiehgldhfkjds'}});
+        dispatch(addBoardToBoards({name:nameForNewBoard, 
+                                   id: newBoardsId, 
+                                   columnIds: namesForNewColumns.map(el => el.id)}))
+
 
         // create all the new columns
         namesForNewColumns.forEach((column) => {
@@ -86,6 +89,7 @@ function NewBoardForm() {
                         type='text'
                         id='boardNameInput'
                         value={nameForNewBoard}
+                        autoFocus
                         onChange={(e) => setNameForNewBoard(e.target.value)}
                     />
                     <label id='columnLabel'>Columns</label>

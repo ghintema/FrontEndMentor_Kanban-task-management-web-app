@@ -94,6 +94,7 @@ h1 {
 }
 
 .emptyBoardContainer {
+    width: 100%;
     height:100%;
     display:flex;
     flex-direction:column;
@@ -162,7 +163,7 @@ label {
     margin-bottom: 7px;
 }
 
-input {
+input, select {
     height: 40px;
     width:100%;
     padding:12px;
@@ -179,6 +180,8 @@ li input {
     margin-right: 15px;
     
 }
+
+.selectStatus {margin: 0;}
 
 .closingCrossButton {
     border: none;
@@ -205,17 +208,23 @@ li input {
 .addNewButton {
     color: #635FC7;
     background-color: #efeff9;
-    margin: 12px 0 24px 0;
+    margin: 12px 0;
 }
 
 .createNewButton {
     color: white;
     background-color: #635fc7;
+    margin:12px 0;
 }
 
 textarea {
     width: 100%;
     margin-bottom: 5px;
+}
+
+.selectStatus {
+    margin: 0;
+    
 }
 
 

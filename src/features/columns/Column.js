@@ -7,19 +7,20 @@ import { Card } from '../cards/Card.js';
 function Column(props) {
     
     const id = props.id
+    console.log(`Column id: ${id}`)
     const allColumns = useSelector(selectColumns);
-    console.log(id)
-    console.log(allColumns[id])
-    // const cardsToBeRendered = allColumns[id].cardIds;
-
-    // const columnIsEmpty = cardsToBeRendered.length === 0;
+    const cardIdsOfTheColumn = allColumns[id].cardIds;
+    const columnIsEmpty = cardIdsOfTheColumn.length === 0;
+    
+    console.log(cardIdsOfTheColumn)
 
     return ( 
         
             <div className='columnContainer'> 
-                {/* {columnIsEmpty ? <p>no tasks on this column</p> :
-                    cardsToBeRendered.map(card => <Card id={card.id} key={card.id} />)
-                } */}
+                <h3>{allColumns[id].name}</h3>
+                {columnIsEmpty ? <p>No tasks on this column</p> :
+                    cardIdsOfTheColumn.map(id => <Card id={id} key={id} />)
+                }
             </div>
         
      );
