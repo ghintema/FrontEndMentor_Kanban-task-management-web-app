@@ -17,13 +17,20 @@ function Column(props) {
     return ( 
         
             <div className='columnContainer'> 
-                <h3>{allColumns[id].name}</h3>
-                {columnIsEmpty ? <p>No tasks on this column</p> :
-                    cardIdsOfTheColumn.map(id => <Card id={id} key={id} />)
-                }
+                <h2>{allColumns[id].name}</h2>
+                <ul>
+                    {columnIsEmpty ? <li>No tasks</li> :
+                        cardIdsOfTheColumn.map(id => <li key={id + 1}><Card id={id} key={id + 2} /></li>)
+                    }
+                </ul>
             </div>
         
      );
 }
 
 export {Column};
+
+
+{/* <ul>
+                        cardIdsOfTheColumn.map(id => <li key={id + 1}><Card id={id} key={id + 2} /></li>)
+                    </ul> */}

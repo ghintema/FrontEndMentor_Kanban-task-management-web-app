@@ -65,9 +65,9 @@ function NewTaskForm() {
                                  columnId: targetColumnId,
                                  boardColumnIds: allBoards[boardId].columnIds, 
                                  subTasks:  subTasks.map(subTask => {
-                                            return {[subTask.id]: { name: subTask.name, 
-                                                                    id: subTask.id,
-                                                                    status: 'open' } }})}));
+                                            return { name: subTask.name, 
+                                                     id: subTask.id,
+                                                     status: 'open' } })}));
         
         dispatch(addCardIdToColumn([targetColumnId, newCardsId]))
 
@@ -75,13 +75,22 @@ function NewTaskForm() {
 
     }
 
-    const closeTheForm = (e) => {
-        history.goBack()
+    const closeTheFormBackground = (e) => {
+        console.log( e.target.classList)
+        if (e.target.classList.contains('formBackground') ) {
+            history.goBack() // to close the form
+        }
     }
 
+    const closeTheFormCross = (e) => {
+        console.log( e.target.classList)
+        if (e.target.classList.contains('iconCross') ) {
+            history.goBack() // to close the form
+        }
+    }
     console.log(allColumns)
     return ( 
-        <div className='formBackground' >
+        <div className='formBackground' onClick={closeTheFormBackground}>
             <div className='formContainer'>
                 <h3 className='formTitle'>Define a new Task here</h3>
                     <form>
@@ -154,7 +163,7 @@ function NewTaskForm() {
                         type = "button"
                         key = {Math.floor(Math.random()*1000)}
                         aria-label='close Form'
-                        onClick={closeTheForm}>
+                        onClick={closeTheFormCross}>
                             <img src={cross} className='iconCross' alt=''/>
                          </button>
 

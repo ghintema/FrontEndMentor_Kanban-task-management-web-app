@@ -1,16 +1,18 @@
 import React from 'react';
 import ReactDOM from 'react-dom'
+import { useLocation, Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { selectCards } from './cardsSlice';
 
 
 function Card ( props ) {
 
-    const id = props.id;
-
-    console.log(`Card id: ${id}`)
+    const cardId = props.id;
+    const location = useLocation()
+    console.log(location)
+    const boardId = location.pathname;
     const allCards = useSelector(selectCards);
-    const cardToBeRendered = allCards[id];
+    const cardToBeRendered = allCards[cardId];
     console.log(allCards)
     console.log(cardToBeRendered.subTasks)
 
@@ -20,10 +22,13 @@ function Card ( props ) {
 
 
     return ( 
-        <div className='cardContainer'>
-            <h3>{cardToBeRendered.name}</h3>
-            <p>{subTasksDone} out of {subTasksTotal} subtasks</p>
-        </div>
+        <Link to={boardId + '/' + cardId + '/ShowTask'} style={{textDecoration: 'none'}}>
+            <div className='cardContainer'>
+                <h3>{cardToBeRendered.name}</h3>
+                <p>{subTasksDone} of {subTasksTotal} subtasks</p>
+            </div>
+        </Link>
+
      );
 }
 
