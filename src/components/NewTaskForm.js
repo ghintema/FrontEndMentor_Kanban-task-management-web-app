@@ -3,8 +3,7 @@ import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams, useHistory } from 'react-router-dom';
 import { selectBoards } from '../features/boards/boardsSlice';
-import { selectColumns } from '../features/columns/columnsSlice';
-import { addTaskIdToColumn } from '../features/columns/columnsSlice'
+import { selectColumns, addTaskIdToColumn } from '../features/columns/columnsSlice';
 import { addTaskToTasks } from '../features/tasks/tasksSlice'
 import cross from '../assets/cross-icon.svg';
 
@@ -16,63 +15,68 @@ function NewTaskForm() {
     const { boardId } = useParams(); 
     const allBoards = useSelector(selectBoards);
     const allColumns = useSelector(selectColumns);
-    const [nameForNewTask,  setNameForNewTask]              = useState('');
-    const [descriptionForNewTask, setDescriptionForNewTask] = useState('');
-    const [subTasks,        setSubTasks]                    = useState([{name: '', id:Math.floor(Math.random()*1000), status: 'open' }]);
-    const [targetColumnId,  setTargetColumnId]              = useState(allBoards[boardId].columnIds[0]);
     
+    const [newTask, setNewTask] = useState({name:'task name', 
+                                            id: Math.floor(Math.random()*1000).toString(),
+                                            description:'This is to be done', 
+                                            columnId:allBoards[boardId].columnIds[0], 
+                                            boardColumnIds:allBoards[boardId].columnIds, 
+                                            subTasks: [ {name: '', 
+                                                        id: Math.floor(Math.random()*1000).toString(), 
+                                                        status: 'open'} ]})
    
-    const changeNameForTask = (e) => {
-        setNameForNewTask(e.target.value)
+    const changeTaskName = (e) => {
+        const newTaskCopy = {...newTask};           // copy to prevent state-mutation
+        newTaskCopy.name = e.target.value;          // change the copy as needed.
+        setNewTask(newTaskCopy);                    // update the state with the copy
     }
 
-    const changeDescriptionForTask = (e) => {
-        setDescriptionForNewTask(e.target.value)
+    const changeTaskDescription = (e) => {
+        const newTaskCopy = {...newTask};           // copy to prevent state-mutation
+        newTaskCopy.description = e.target.value;   // change the copy as needed.
+        setNewTask(newTaskCopy);                    // update the state with the copy
     }
     
-    const changeSubTasks = (e) => {
-        const index = +e.target.id                    // the + in front of e.target.id converts string to number
-        const subTasksCopy = [...subTasks];           // copy to prevent state-mutation
-        subTasksCopy[index].name = e.target.value;    // change the indexed element to new value
-        setSubTasks([...subTasksCopy]);                // set all new subTasks to the state
+    const changeSubTaskName = (e) => {
+        const index = +e.target.id                              // the + in front of e.target.id converts string to number
+        const newTaskCopy = JSON.parse(JSON.stringify(newTask)) // spread-operator is not sufficient here because deep-level property is about to be changed.
+        newTaskCopy.subTasks[index].name = e.target.value;      // change the indexed element to new value
+        setNewTask(newTaskCopy);                                // update the state with the copy
     }
 
     const removeSubTask = (e) => {
         const index = +e.target.id
-        const subTasksCopy = [...subTasks];           // copy to prevent state-mutation
-        subTasksCopy.splice(index,1)                  // remove the indexed element from the array 
-        setSubTasks([...subTasksCopy]);     // set all new names to the state
+        const newTaskCopy = JSON.parse(JSON.stringify(newTask)) // spread-operator is not sufficient here because deep-level property is about to be changed.
+        newTaskCopy.subTasks.splice(index,1)                    // remove the indexed element from the array 
+        setNewTask(newTaskCopy);                                // update the state with the copy
     }
 
-    const addSubTask =  () => {
-        const subTasksCopy = [...subTasks];           // copy to prevent state-mutation
-        subTasksCopy.push({name: 'new taks', id: Math.floor(Math.random()*1000), status: 'open' });                   // add new empty entry
-        setSubTasks([...subTasksCopy]);     // set all new names to the state
+    const addSubTask =  (e) => {
+        const index = +e.target.id
+        const newTaskCopy = JSON.parse(JSON.stringify(newTask)) // spread-operator is not sufficient here because deep-level property is about to be changed.
+        newTaskCopy.subTasks.push({name: '',                    // add a new subTask-object to the array.
+                                    id: Math.floor(Math.random()*1000).toString(),
+                                    status: 'open'})                    
+        setNewTask(newTaskCopy);                                // update the state with the copy
     }
 
 
     const choseTargetColumn = (e) => {
-        setTargetColumnId(e.target.value)
+        const newTaskCopy = {...newTask};           // copy to prevent state-mutation
+        newTaskCopy.columnId = e.target.value;      // change the copy as needed.
+        setNewTask(newTaskCopy);                    // update the state with the copy
     }
 
     const createTheTask = () => {
 
-        const newTasksId = Math.floor(Math.random()*1000).toString();
+        // create the new card...
+        dispatch(addTaskToTasks({...newTask}))
 
-        dispatch(addTaskToTasks({name: nameForNewTask, 
-                                 id: newTasksId, 
-                                 description: descriptionForNewTask,
-                                 columnId: targetColumnId,
-                                 boardColumnIds: allBoards[boardId].columnIds, 
-                                 subTasks:  subTasks.map(subTask => {
-                                            return { name: subTask.name, 
-                                                     id: subTask.id,
-                                                     status: 'open' } })}));
+        // let the column know, there is a new card to be rendered
+        dispatch(addTaskIdToColumn([newTask.columnId, newTask.id]))
         
-        dispatch(addTaskIdToColumn([targetColumnId, newTasksId]))
-
+        // close the form
         history.goBack()
-
     }
 
     const closeTheForm = (e) => {
@@ -95,23 +99,23 @@ function NewTaskForm() {
         	        
                         <label for='taskNameInput'>Name</label>
                         <input 
-                            key = {33} //{Math.floor(Math.random()*1000)}
+                            key = {33} 
                             type='text'
                             id='taskNameInput'
-                            value={nameForNewTask}
+                            value={newTask.name}
                             autoFocus
-                            onChange={changeNameForTask}
+                            onChange={changeTaskName}
                         />
                         <label for='descriptionInput'>description</label>
                         <textarea 
                             cols='20'
                             rows='3'
-                            onChange={changeDescriptionForTask}>
+                            onChange={changeTaskDescription}>
                             descripe your task here...
                         </textarea>
                         <label id='subTaskLabel'>Subtasks</label>
                         <ul>
-                            {subTasks.map((subTask, index) => {
+                            {newTask.subTasks.map((subTask, index) => {
                                 return (
                                      <li key={subTask.id + 0}>
                                         <input
@@ -121,7 +125,7 @@ function NewTaskForm() {
                                             id={index}
                                             value={subTask.name}
                                             aria-labelledby='subTaskLabel'
-                                            onChange={(e) => changeSubTasks(e) } 
+                                            onChange={(e) => changeSubTaskName(e) } 
                                         />
                                         <button
                                             className='closingCrossButton'     

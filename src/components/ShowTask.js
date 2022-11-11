@@ -1,28 +1,36 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useHistory, useParams } from 'react-router';
+import { useHistory, useParams  } from 'react-router';
+import { Link } from 'react-router-dom';
 import { addTaskToTasks, selectTasks } from '../features/tasks/tasksSlice';
+import { selectBoards } from '../features/boards/boardsSlice'
 import { addTaskIdToColumn, removeTaskIdFromColumn, selectColumns } from '../features/columns/columnsSlice';
 import cross from '../assets/cross-icon.svg';
 
 
 function ShowTask() {
 
+    const { boardId } = useParams();
     const { taskId }  = useParams();
     const history = useHistory();
     const dispatch = useDispatch();
     const allTasks = useSelector(selectTasks);
+    const allBoards = useSelector(selectBoards);
     const allColumns = useSelector(selectColumns);
 
-    const [presentTask, setPresentTask] = useState({subTasks: [], boardColumnIds:[]})
-   
     // initializing the local states with the existing values 
     // of the selected task to pre-fill the form and to preserv unchanged data
-    useEffect(() => { 
+    const [presentTask, setPresentTask] = useState({name: allTasks[taskId].name, 
+                                                    id: allTasks[taskId].id,
+                                                    description: allTasks[taskId].description, 
+                                                    columnId: allTasks[taskId].columnId, 
+                                                    boardColumnIds: allTasks[taskId].boardColumnIds,
+                                                    subTasks: allTasks[taskId].subTasks})
+   
+  
 
-        setPresentTask(allTasks[taskId])
-
-    },[taskId])
+    console.log(allTasks)
+    console.log(presentTask)
 
     const changeSubTaskStatus = (e) => {
 
@@ -54,9 +62,6 @@ function ShowTask() {
         
     }
 
-    const showSubmenu = () => {
-
-    }
 
 
     const closeTheForm = (e) => {
@@ -120,10 +125,9 @@ function ShowTask() {
                     })}
                 </select>
 
-                <button
-                    onClick={showSubmenu}>
-                    More...
-                </button>
+                <Link to={'/'+boardId + '/' + taskId + '/EditTaskForm'}>
+                    More Editing...
+                </Link>
                     
                 <button 
                     className = "closingCrossButton closingFormButton"

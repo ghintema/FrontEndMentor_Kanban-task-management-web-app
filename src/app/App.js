@@ -57,7 +57,7 @@ function App() {
           <ShowTask />
         </Route>
         <Route path="/:boardId/:taskId/EditTaskForm">
-          <ShowTask />
+          <EditTaskForm />
         </Route>
       </Router>
       );

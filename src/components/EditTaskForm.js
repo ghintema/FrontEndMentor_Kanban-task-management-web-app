@@ -1,92 +1,89 @@
-import React, { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { useHistory, useParams } from 'react-router';
-import { selectTasks } from '../features/tasks/tasksSlice';
+import React from 'react';
+import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useParams, useHistory } from 'react-router-dom';
+import { selectBoards } from '../features/boards/boardsSlice';
+import { selectColumns, addTaskIdToColumn } from '../features/columns/columnsSlice';
+import { selectTasks, addTaskToTasks } from '../features/tasks/tasksSlice.js';
 import cross from '../assets/cross-icon.svg';
-import { selectColumns } from '../features/columns/columnsSlice';
 
+// The only adaptions from NewTaksForm -> EditTaskForm is
+// 1.) presentTask -> presentTask. Search and Replace all over the file
+// 2.) initialize presentTask with all values according to taskId
+// 3.) function 'saveTheTask' -> was renamed to 'saveTheTask' for more semantic name
+// 4.) button 'Create Task' was renamed to 'Save Changes' for more semantics
 
 function EditTaskForm() {
 
-    const { taskId }  = useParams();
     const history = useHistory();
     const dispatch = useDispatch();
-    const allTasks = useSelector(selectTasks);
+    const { boardId } = useParams(); 
+    const { taskId } = useParams();
+    const allBoards = useSelector(selectBoards);
     const allColumns = useSelector(selectColumns);
-
-    const [presentTask, setPresentTask] = useState({subTasks: [], boardColumnIds:[]})
-   
+    const allTasks = useSelector(selectTasks);
+    
     // initializing the local states with the existing values 
     // of the selected task to pre-fill the form and to preserv unchanged data
-    useEffect(() => { 
-
-        setPresentTask(allTasks[taskId])
-
-    },[taskId])
-
-
-
-    
+    const [presentTask, setPresentTask] = useState({name: allTasks[taskId].name, 
+                                            id: allTasks[taskId].id,
+                                            description: allTasks[taskId].description, 
+                                            columnId: allTasks[taskId].columnId, 
+                                            boardColumnIds: allTasks[taskId].boardColumnIds,
+                                            subTasks: allTasks[taskId].subTasks})
    
-
-    // initializing the local states with the existing values 
-    // of the selected task to pre-fill the form and to preserv unchanged data
-    
-
-  
     const changeTaskName = (e) => {
-        let presentTaskCopy = {...presentTask}; // copy to prevent state-mutation
-        presentTaskCopy.name = e.target.value;  // change the copy as needed.
-        setPresentTask(presentTaskCopy);        // reset the state with the copy
+        const presentTaskCopy = {...presentTask};           // copy to prevent state-mutation
+        presentTaskCopy.name = e.target.value;          // change the copy as needed.
+        setPresentTask(presentTaskCopy);                    // update the state with the copy
     }
 
+    const changeTaskDescription = (e) => {
+        const presentTaskCopy = {...presentTask};           // copy to prevent state-mutation
+        presentTaskCopy.description = e.target.value;   // change the copy as needed.
+        setPresentTask(presentTaskCopy);                    // update the state with the copy
+    }
+    
     const changeSubTaskName = (e) => {
-        const index = +e.target.id
-        let presentTaskCopy = {...presentTask};             // copy to prevent state-mutation
-        presentTaskCopy.subTasks[index].name = e.target.value;// reset the state with the copy
-    }
-
-
-    const addSubTask = (e) => {
-
-        const index = +e.target.id
-        let presentTaskCopy = {...presentTask};             // copy to prevent state-mutation
-        presentTaskCopy.subTasks.push({ name: e.target.value, 
-                                        id: Math.floor(Math.random()*1000).toString() })
-
-
-
-        // one blank inputfield is in the form to offer. 
-        // OnChange of this field a new object is add to local subTask-State
-        // POSSIBLE BONUS: This input field is hidden in an animated accordeon
-        // Alternatively: The known 'add new Subtask' button bellow the list of existing subTask but without a blank input field.
-        //      Advantage: addSubTask would work exactly like in NewTaskForm
-
-        // It maybe important to give the new subtasks a completely new status to differ  the rendering.
+        const index = +e.target.id                              // the + in front of e.target.id converts string to number
+        const presentTaskCopy = JSON.parse(JSON.stringify(presentTask)) // spread-operator is not sufficient here because deep-level property is about to be changed.
+        presentTaskCopy.subTasks[index].name = e.target.value;      // change the indexed element to new value
+        setPresentTask(presentTaskCopy);                                // update the state with the copy
     }
 
     const removeSubTask = (e) => {
-
         const index = +e.target.id
-        let presentTaskCopy = {...presentTask};             // copy to prevent state-mutation
-        presentTaskCopy.subTasks.splice(index,1);           // remove the indexed element from the array
-        setPresentTask(presentTaskCopy)                     // reset the state with the copy
-
+        const presentTaskCopy = JSON.parse(JSON.stringify(presentTask)) // spread-operator is not sufficient here because deep-level property is about to be changed.
+        presentTaskCopy.subTasks.splice(index,1)                    // remove the indexed element from the array 
+        setPresentTask(presentTaskCopy);                                // update the state with the copy
     }
+
+    const addSubTask =  (e) => {
+        const index = +e.target.id
+        const presentTaskCopy = JSON.parse(JSON.stringify(presentTask)) // spread-operator is not sufficient here because deep-level property is about to be changed.
+        presentTaskCopy.subTasks.push({name: '',                    // add a new subTask-object to the array.
+                                    id: Math.floor(Math.random()*1000).toString(),
+                                    status: 'open'})                    
+        setPresentTask(presentTaskCopy);                                // update the state with the copy
+    }
+
 
     const choseTargetColumn = (e) => {
-        
-        let presentTaskCopy = {...presentTask};             // copy to prevent state-mutation
-        presentTaskCopy.ColumnId = e.target.value;
-        setPresentTask(presentTaskCopy);                     // reset the state with the copy
-
+        const presentTaskCopy = {...presentTask};           // copy to prevent state-mutation
+        presentTaskCopy.columnId = e.target.value;      // change the copy as needed.
+        setPresentTask(presentTaskCopy);                    // update the state with the copy
     }
 
-    const storeChanges = () => {
+    const saveTheTask = () => {
 
+        // create the new card...
+        dispatch(addTaskToTasks({...presentTask}))
+
+        // let the column know, there is a new card to be rendered
+        dispatch(addTaskIdToColumn([presentTask.columnId, presentTask.id]))
         
-        history.goBack() // to close the form
-
+        // close the form
+        history.goBack()
     }
 
     const closeTheForm = (e) => {
@@ -104,70 +101,84 @@ function EditTaskForm() {
     return ( 
         <div className='formBackground' onClick={closeTheForm}>
             <div className='formContainer'>
-                <h3 className='formTitle'>Edit the Task</h3>
-                <form>
+                <h3 className='formTitle'>Edit the Task here</h3>
+                    <form>
         	        
-                    <label for='taskNameInput'>Name</label>
-                    <input 
-                        key = {33} //{Math.floor(Math.random()*1000)}
-                        type='text'
-                        id='taskNameInput'
-                        value={presentTask.name}
-                        onChange={changeTaskName}
-                    />
-
-
-                    {/* description here */}
-
-                    <label id='columnLabel'>Subtasks</label>
-                    <ul>
-                        {presentTask.subTasks
-                            .filter(subTask => subTask.status === 'open' || subTask.status === 'done')
-                            .map((subTask, index) => {
+                        <label for='taskNameInput'>Name</label>
+                        <input 
+                            key = {33} 
+                            type='text'
+                            id='taskNameInput'
+                            value={presentTask.name}
+                            autoFocus
+                            onChange={changeTaskName}
+                        />
+                        <label for='descriptionInput'>description</label>
+                        <textarea 
+                            cols='20'
+                            rows='3'
+                            onChange={changeTaskDescription}>
+                            descripe your task here...
+                        </textarea>
+                        <label id='subTaskLabel'>Subtasks</label>
+                        <ul>
+                            {presentTask.subTasks.map((subTask, index) => {
                                 return (
-                                    <li 
-                                        className='subTaskPresentation'
-                                        key={subTask.id + 0}
-                                    >
-                                        <input 
+                                     <li key={subTask.id + 0}>
+                                        <input
+                                            className='inputField subInput'
+                                            key = {subTask.id + 1}
                                             type='text'
-                                            // className='checkbox'
                                             id={index}
-                                            onChange={changeSubTaskName}
+                                            value={subTask.name}
+                                            aria-labelledby='subTaskLabel'
+                                            onChange={(e) => changeSubTaskName(e) } 
                                         />
                                         <button
                                             className='closingCrossButton'     
                                             key = {subTask.id + 2}
                                             id={index} 
-                                            aria-label='remove sub task'
-                                            onClick={(e) => removeSubTask(e)}
-                                        >
-                                            <img src={cross} id={index} className='iconCross' key={subTask.id + 13} alt=''/>
+                                            aria-label='remove subTask'
+                                            onClick={(e) => removeSubTask(e)}>
+                                                <img src={cross} id={index} className='iconCross' key={subTask.id + 13} alt=''/>
                                         </button>
                                     </li>
                                 )
-                            })
-                        }
-                    </ul>
+                            })}
+                        </ul>
 
-                    <select id='selectStatus' className='selectStatus' onChange={choseTargetColumn}>
-                            {presentTask.boardColumnIds.map(id => {
+                        <button
+                        className = "formButton addNewButton" 	
+                        type = "button"
+                        key = {Math.floor(Math.random()*1000)}
+                        onClick={addSubTask}>
+                        Add more sub tasks
+                        </button>
+                        <label for='selectStatus'>Status</label>
+                        <select id='selectStatus' className='selectStatus' onChange={choseTargetColumn}>
+                            {allBoards[boardId].columnIds.map(id => {
                                 return <option key={id} id={id} value={id}>{allColumns[id].name}</option>
                             })}
-                    </select>
-                    
-                    <button 
+                        </select>
+                        <button 
+                            className = "formButton createNewButton"
+                            type = "button"
+                            key = {Math.floor(Math.random()*1000)}
+                            onClick={saveTheTask}>
+                            Save the Changes
+                        </button>
+                        <button 
                         className = "closingCrossButton closingFormButton"
                         type = "button"
                         key = {Math.floor(Math.random()*1000)}
                         aria-label='close Form'>
                             <img src={cross} className='iconCross closeTheForm' alt=''/>
-                    </button> 
-                </form>
-            
+                         </button>
+
+                    </form>
             </div>
         </div>
      );
 }
 
-export { EditTaskForm };
+export {EditTaskForm};
