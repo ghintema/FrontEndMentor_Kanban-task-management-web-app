@@ -39,7 +39,6 @@ function ShowTask() {
         setPresentCard(presentCardCopy);                     // reset the state with the copy
 
         dispatch(addCardToCards({...presentCardCopy}))
-        console.log(presentCardCopy)
 
     }
 
@@ -55,7 +54,6 @@ function ShowTask() {
         dispatch(addCardIdToColumn([presentCardCopy.columnId, taskId]));
         
         
-        console.log(e.target.value)
 
 
     }
@@ -80,7 +78,7 @@ function ShowTask() {
                 <h3 className='formTitle'>{presentCard.name}</h3>
 
 
-                <p>{presentCard.description} </p>    {/* description here */}
+                <p className='taskDescription'>{presentCard.description} </p>    {/* description here */}
 
                 <label id='columnLabel'>Subtasks</label>
                 <ul>
@@ -95,6 +93,7 @@ function ShowTask() {
                                     className='checkbox'
                                     id={index}
                                     onChange={changeSubTaskStatus}
+                                    checked={subTask.status === 'done' ? true : false }
                                 />
                                 <label
                                     for={index}
@@ -111,7 +110,12 @@ function ShowTask() {
 
                 <select id='selectStatus' className='selectStatus' onChange={choseTargetColumn}>
                     {presentCard.boardColumnIds.map(id => {
-                        return <option key={id} id={id} value={id}>{allColumns[id].name}</option>
+                        return <option 
+                                    key={id} id={id} 
+                                    value={id}
+                                    selected={id == presentCard.columnId ? true : false}
+                                    >{allColumns[id].name}
+                                </option>
                     })}
                 </select>
                     

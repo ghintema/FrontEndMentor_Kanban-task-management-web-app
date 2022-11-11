@@ -7,12 +7,10 @@ import { Card } from '../cards/Card.js';
 function Column(props) {
     
     const id = props.id
-    console.log(`Column id: ${id}`)
     const allColumns = useSelector(selectColumns);
     const cardIdsOfTheColumn = allColumns[id].cardIds;
     const columnIsEmpty = cardIdsOfTheColumn.length === 0;
     
-    console.log(cardIdsOfTheColumn)
 
     return ( 
         

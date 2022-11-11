@@ -5,7 +5,6 @@ import boardsSlice  from "../features/boards/boardsSlice";
 import cardsSlice from "../features/cards/cardsSlice";
 import columnsSlice from "../features/columns/columnsSlice";
 import optionsSlice from "../features/options/optionsSlice";
-// console.log(boardsSlice)
 
 export const store = configureStore({
     reducer: {

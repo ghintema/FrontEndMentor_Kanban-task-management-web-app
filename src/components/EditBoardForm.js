@@ -81,14 +81,12 @@ function EditBoardForm() {
     }
 
     const closeTheFormBackground = (e) => {
-        console.log( e.target.classList)
         if (e.target.classList.contains('formBackground') ) {
             history.goBack() // to close the form
         }
     }
 
     const closeTheFormCross = (e) => {
-        console.log( e.target.classList)
         if (e.target.classList.contains('iconCross') ) {
             history.goBack() // to close the form
         }

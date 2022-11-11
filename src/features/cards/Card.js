@@ -9,12 +9,9 @@ function Card ( props ) {
 
     const cardId = props.id;
     const location = useLocation()
-    console.log(location)
     const boardId = location.pathname;
     const allCards = useSelector(selectCards);
     const cardToBeRendered = allCards[cardId];
-    console.log(allCards)
-    console.log(cardToBeRendered.subTasks)
 
     const subTasksTotal = cardToBeRendered.subTasks.length;
     const subTasksDone = cardToBeRendered.subTasks.filter(subTask => subTask.status === 'done').length;

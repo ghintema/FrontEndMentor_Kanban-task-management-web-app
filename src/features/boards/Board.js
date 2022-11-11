@@ -15,10 +15,6 @@ function Board() {
 
     const allBoards = useSelector(selectBoards);
     const { boardId } = useParams()
-    
-    // console.log(boardId)
-    // console.log(allBoards[boardId])
-    // console.log(typeof boardId === 'number')
 
    
 
