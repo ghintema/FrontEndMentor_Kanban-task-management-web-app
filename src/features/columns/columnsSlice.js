@@ -1,8 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-const initialState = {'456': {name:'column headline', id:'456', cardIds: []}}
+const initialState = {'456': {name:'column headline', id:'456', taskIds: []}}
 
-// cardIds carrys all cards currently shown in this columns
+// taskIds carrys all tasks currently shown in this columns
 
 export const columnsSlice = createSlice({
     name:'columns',
@@ -16,13 +16,13 @@ export const columnsSlice = createSlice({
             const columnIdToDelete = action.payload;
             delete columns[columnIdToDelete]
         },
-        addCardIdToColumn(columns, action) {
-            const [ columnId, cardId ] = action.payload;
-            columns[columnId].cardIds.push(cardId)
+        addTaskIdToColumn(columns, action) {
+            const [ columnId, taskId ] = action.payload;
+            columns[columnId].taskIds.push(taskId)
         },
-        removeCardIdFromColumn(columns, action) {
-            const [ columnId, cardId ] = action.payload;
-            columns[columnId].cardIds = columns[columnId].cardIds.filter(id => id !== cardId )
+        removeTaskIdFromColumn(columns, action) {
+            const [ columnId, taskId ] = action.payload;
+            columns[columnId].taskIds = columns[columnId].taskIds.filter(id => id !== taskId )
         },
         setColumnName(columns, action) {
             const [ columnId, newName ] = action.payload;
@@ -37,7 +37,7 @@ export const selectColumns = (state) => {
 
 export const {  addColumnToColumns,
                 removeColumnFromColumns,
-                addCardIdToColumn,
-                removeCardIdFromColumn,
+                addTaskIdToColumn,
+                removeTaskIdFromColumn,
                 setColumnName } = columnsSlice.actions;
 export default columnsSlice.reducer;

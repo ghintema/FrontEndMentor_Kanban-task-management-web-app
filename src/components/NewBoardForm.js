@@ -52,7 +52,7 @@ function NewBoardForm() {
 
         // create all the new columns
         namesForNewColumns.forEach((column) => {
-            dispatch(addColumnToColumns({name: column.name, id: column.id.toString(), cardIds:[]}))
+            dispatch(addColumnToColumns({name: column.name, id: column.id.toString(), taskIds:[]}))
         })
 
         // reset the form

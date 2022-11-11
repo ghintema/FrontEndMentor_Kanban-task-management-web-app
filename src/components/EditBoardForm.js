@@ -26,12 +26,12 @@ function EditBoardForm() {
         
         setNameForBoard(allBoards[boardId].name);
 
-        // iterating over all existing columns of the selected board to collect the id, name and cardIds
+        // iterating over all existing columns of the selected board to collect the id, name and taskIds
         
         let initialColumns = [];
         allBoards[boardId].columnIds.map(id => initialColumns.push({name: allColumns[id].name , 
                                                                     id: id, 
-                                                                    cardIds: allColumns[id].cardIds }) )
+                                                                    taskIds: allColumns[id].taskIds }) )
         setnewColumnConfig(initialColumns)
 
     },[boardId])
@@ -56,7 +56,7 @@ function EditBoardForm() {
         const columnConfigCopy = [...newColumnConfig];      // copy to prevent state-mutation
         columnConfigCopy.push({ name: 'new',                
                                 id: Math.floor(Math.random()*1000), 
-                                cardIds: [] });             // add new empty entry       
+                                taskIds: [] });             // add new empty entry       
         setnewColumnConfig([...columnConfigCopy]);          // set all new names to the state
     }
 
@@ -71,29 +71,28 @@ function EditBoardForm() {
          // create all the new columns
 
 
-         // it musst be checked wether or not the columId existed bevore. If so, it's crucial to pass the existing cardIds. Otherwise you empty all columns when editing the board.
+         // it musst be checked wether or not the columId existed bevore. If so, it's crucial to pass the existing taskIds. Otherwise you empty all columns when editing the board.
 
          newColumnConfig.forEach((column) => {
-            dispatch(addColumnToColumns({name: column.name, id: column.id.toString(), cardIds:column.cardIds}))
+            dispatch(addColumnToColumns({name: column.name, id: column.id.toString(), taskIds:column.taskIds}))
         })
 
         history.goBack() // to close the form.
     }
 
-    const closeTheFormBackground = (e) => {
+    const closeTheForm = (e) => {
+
+        // close the form on click of 'formBackground' or 'iconCross'
         if (e.target.classList.contains('formBackground') ) {
             history.goBack() // to close the form
         }
-    }
-
-    const closeTheFormCross = (e) => {
-        if (e.target.classList.contains('iconCross') ) {
+        if (e.target.classList.contains('closeTheForm') ) {
             history.goBack() // to close the form
         }
     }
 
     return ( 
-        <div className='formBackground' onClick={closeTheFormBackground}>
+        <div className='formBackground' onClick={closeTheForm}>
             <div className='formContainer'>
                 <h3 className='formTitle'>Edit the Board</h3>
                 <form>
@@ -150,9 +149,8 @@ function EditBoardForm() {
                         className = "closingCrossButton closingFormButton"
                         type = "button"
                         key = {Math.floor(Math.random()*1000)}
-                        aria-label='close Form'
-                        onClick={closeTheFormCross}>
-                            <img src={cross} className='iconCross' alt=''/>
+                        aria-label='close Form'>
+                            <img src={cross} className='iconCross closeTheForm' alt=''/>
                     </button>
                 </form>
             </div>

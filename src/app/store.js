@@ -2,7 +2,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import { combineReducers, createStore, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
 import boardsSlice  from "../features/boards/boardsSlice";
-import cardsSlice from "../features/cards/cardsSlice";
+import tasksSlice from "../features/tasks/tasksSlice";
 import columnsSlice from "../features/columns/columnsSlice";
 import optionsSlice from "../features/options/optionsSlice";
 
@@ -10,7 +10,7 @@ export const store = configureStore({
     reducer: {
         boards: boardsSlice,
         columns: columnsSlice,
-        cards: cardsSlice,
+        tasks: tasksSlice,
         options: optionsSlice,
     },
 })
@@ -20,7 +20,7 @@ export const store = configureStore({
 // const rootReducer = combineReducers({
 //     boards: boardsSlice,
 //     columns: columnsSlice,
-//     cards: cardsSlice,
+//     tasks: tasksSlice,
 //     options: optionsSlice,
 // })
 

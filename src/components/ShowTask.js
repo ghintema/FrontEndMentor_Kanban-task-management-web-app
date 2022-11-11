@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory, useParams } from 'react-router';
-import { addCardToCards, selectCards } from '../features/cards/cardsSlice';
-import { addCardIdToColumn, removeCardIdFromColumn, selectColumns } from '../features/columns/columnsSlice';
+import { addTaskToTasks, selectTasks } from '../features/tasks/tasksSlice';
+import { addTaskIdToColumn, removeTaskIdFromColumn, selectColumns } from '../features/columns/columnsSlice';
 import cross from '../assets/cross-icon.svg';
 
 
@@ -11,17 +11,16 @@ function ShowTask() {
     const { taskId }  = useParams();
     const history = useHistory();
     const dispatch = useDispatch();
-    const allCards = useSelector(selectCards);
+    const allTasks = useSelector(selectTasks);
     const allColumns = useSelector(selectColumns);
-    // const presentCard = allCards[taskId];
 
-    const [presentCard, setPresentCard] = useState({subTasks: [], boardColumnIds:[]})
+    const [presentTask, setPresentTask] = useState({subTasks: [], boardColumnIds:[]})
    
     // initializing the local states with the existing values 
-    // of the selected card to pre-fill the form and to preserv unchanged data
+    // of the selected task to pre-fill the form and to preserv unchanged data
     useEffect(() => { 
 
-        setPresentCard(allCards[taskId])
+        setPresentTask(allTasks[taskId])
 
     },[taskId])
 
@@ -29,60 +28,60 @@ function ShowTask() {
 
         const index = +e.target.id
 
-        // let presentCardCopy = {...presentCard};             // copy to prevent state-mutation
-        let presentCardCopy = JSON.parse(JSON.stringify(presentCard)) // spread-operator is not sufficient here because deep-level property is about to be changed.
+        // let presentTaskCopy = {...presentTask};             // copy to prevent state-mutation
+        let presentTaskCopy = JSON.parse(JSON.stringify(presentTask)) // spread-operator is not sufficient here because deep-level property is about to be changed.
         if (e.target.checked) {
-            presentCardCopy.subTasks[index].status = 'done';  // change the copy as needed.
+            presentTaskCopy.subTasks[index].status = 'done';  // change the copy as needed.
         } else {
-            presentCardCopy.subTasks[index].status = 'open';  // change the copy as needed.
+            presentTaskCopy.subTasks[index].status = 'open';  // change the copy as needed.
         }
-        setPresentCard(presentCardCopy);                     // reset the state with the copy
 
-        dispatch(addCardToCards({...presentCardCopy}))
+        setPresentTask(presentTaskCopy);                     // update the local state with the copy
+
+        dispatch(addTaskToTasks({...presentTaskCopy}))      // update the task with new subTask.status
 
     }
 
     const choseTargetColumn = (e) => {
         
-        let presentCardCopy = {...presentCard};             // copy to prevent state-mutation
-        presentCardCopy.columnId = e.target.value;
-        setPresentCard(presentCardCopy);                     // reset the state with the copy
+        let presentTaskCopy = {...presentTask};             // copy to prevent state-mutation
+        presentTaskCopy.columnId = e.target.value;
+        setPresentTask(presentTaskCopy);                     // update the local state with the copy
 
-        dispatch(addCardToCards({...presentCardCopy}))
+        dispatch(addTaskToTasks({...presentTaskCopy}))                   // update the task with new columnId
+        dispatch(removeTaskIdFromColumn([presentTask.columnId, taskId])) // update the former column, that the task was removed
+        dispatch(addTaskIdToColumn([presentTaskCopy.columnId, taskId])); // update the next column, that the task was added 
         
-        dispatch(removeCardIdFromColumn([presentCard.columnId, taskId]))
-        dispatch(addCardIdToColumn([presentCardCopy.columnId, taskId]));
-        
-        
+    }
 
+    const showSubmenu = () => {
 
     }
 
 
-    const closeTheFormBackground = (e) => {
+    const closeTheForm = (e) => {
+
+        // close the form on click of 'formBackground' or 'iconCross'
         if (e.target.classList.contains('formBackground') ) {
             history.goBack() // to close the form
         }
-    }
-
-    const closeTheFormCross = (e) => {
-        if (e.target.classList.contains('iconCross') ) {
+        if (e.target.classList.contains('closeTheForm') ) {
             history.goBack() // to close the form
         }
     }
 
 
     return ( 
-        <div className='formBackground' onClick={closeTheFormBackground} >
+        <div className='formBackground' onClick={closeTheForm} >
             <div className='formContainer'>
-                <h3 className='formTitle'>{presentCard.name}</h3>
+                <h3 className='formTitle'>{presentTask.name}</h3>
 
 
-                <p className='taskDescription'>{presentCard.description} </p>    {/* description here */}
+                <p className='taskDescription'>{presentTask.description} </p>    {/* description here */}
 
                 <label id='columnLabel'>Subtasks</label>
                 <ul>
-                    {presentCard.subTasks.map((subTask, index) => {
+                    {presentTask.subTasks.map((subTask, index) => {
                         return (
                             <li 
                                 className='subTaskPresentation'
@@ -108,24 +107,32 @@ function ShowTask() {
                     }
                 </ul>
 
+                <label>current status</label>
+
                 <select id='selectStatus' className='selectStatus' onChange={choseTargetColumn}>
-                    {presentCard.boardColumnIds.map(id => {
+                    {presentTask.boardColumnIds.map(id => {
                         return <option 
                                     key={id} id={id} 
                                     value={id}
-                                    selected={id == presentCard.columnId ? true : false}
+                                    selected={id == presentTask.columnId ? true : false}
                                     >{allColumns[id].name}
                                 </option>
                     })}
                 </select>
+
+                <button
+                    onClick={showSubmenu}>
+                    More...
+                </button>
                     
                 <button 
                     className = "closingCrossButton closingFormButton"
                     type = "button"
                     key = {Math.floor(Math.random()*1000)}
                     aria-label='close Form'
-                    onClick={closeTheFormCross}>
-                        <img src={cross} className='iconCross' alt=''/>
+                    // onClick={closeTheFormCross}
+                    >
+                        <img src={cross} className='iconCross closeTheForm' alt=''/>
                 </button> 
         
             

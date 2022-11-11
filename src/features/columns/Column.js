@@ -2,14 +2,14 @@ import React from 'react'
 import { useSelector } from 'react-redux';
 import columnsSlice from './columnsSlice';
 import { selectColumns } from './columnsSlice'
-import { Card } from '../cards/Card.js';
+import { Task } from '../tasks/Task.js';
 
 function Column(props) {
     
     const id = props.id
     const allColumns = useSelector(selectColumns);
-    const cardIdsOfTheColumn = allColumns[id].cardIds;
-    const columnIsEmpty = cardIdsOfTheColumn.length === 0;
+    const taskIdsOfTheColumn = allColumns[id].taskIds;
+    const columnIsEmpty = taskIdsOfTheColumn.length === 0;
     
 
     return ( 
@@ -18,7 +18,7 @@ function Column(props) {
                 <h2>{allColumns[id].name}</h2>
                 <ul>
                     {columnIsEmpty ? <li>No tasks</li> :
-                        cardIdsOfTheColumn.map(id => <li key={id + 1}><Card id={id} key={id + 2} /></li>)
+                        taskIdsOfTheColumn.map(id => <li key={id + 1}><Task id={id} key={id + 2} /></li>)
                     }
                 </ul>
             </div>
@@ -30,5 +30,5 @@ export {Column};
 
 
 {/* <ul>
-                        cardIdsOfTheColumn.map(id => <li key={id + 1}><Card id={id} key={id + 2} /></li>)
+                        taskIdsOfTheColumn.map(id => <li key={id + 1}><Task id={id} key={id + 2} /></li>)
                     </ul> */}

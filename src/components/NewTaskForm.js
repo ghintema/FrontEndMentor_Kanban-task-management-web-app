@@ -4,8 +4,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useParams, useHistory } from 'react-router-dom';
 import { selectBoards } from '../features/boards/boardsSlice';
 import { selectColumns } from '../features/columns/columnsSlice';
-import { addCardIdToColumn } from '../features/columns/columnsSlice'
-import { addCardToCards } from '../features/cards/cardsSlice'
+import { addTaskIdToColumn } from '../features/columns/columnsSlice'
+import { addTaskToTasks } from '../features/tasks/tasksSlice'
 import cross from '../assets/cross-icon.svg';
 
 
@@ -57,10 +57,10 @@ function NewTaskForm() {
 
     const createTheTask = () => {
 
-        const newCardsId = Math.floor(Math.random()*1000).toString();
+        const newTasksId = Math.floor(Math.random()*1000).toString();
 
-        dispatch(addCardToCards({name: nameForNewTask, 
-                                 id: newCardsId, 
+        dispatch(addTaskToTasks({name: nameForNewTask, 
+                                 id: newTasksId, 
                                  description: descriptionForNewTask,
                                  columnId: targetColumnId,
                                  boardColumnIds: allBoards[boardId].columnIds, 
@@ -69,25 +69,26 @@ function NewTaskForm() {
                                                      id: subTask.id,
                                                      status: 'open' } })}));
         
-        dispatch(addCardIdToColumn([targetColumnId, newCardsId]))
+        dispatch(addTaskIdToColumn([targetColumnId, newTasksId]))
 
         history.goBack()
 
     }
 
-    const closeTheFormBackground = (e) => {
+    const closeTheForm = (e) => {
+
+        // close the form on click of 'formBackground' or 'iconCross'
         if (e.target.classList.contains('formBackground') ) {
+            history.goBack() // to close the form
+        }
+        if (e.target.classList.contains('closeTheForm') ) {
             history.goBack() // to close the form
         }
     }
 
-    const closeTheFormCross = (e) => {
-        if (e.target.classList.contains('iconCross') ) {
-            history.goBack() // to close the form
-        }
-    }
+
     return ( 
-        <div className='formBackground' onClick={closeTheFormBackground}>
+        <div className='formBackground' onClick={closeTheForm}>
             <div className='formContainer'>
                 <h3 className='formTitle'>Define a new Task here</h3>
                     <form>
@@ -159,9 +160,8 @@ function NewTaskForm() {
                         className = "closingCrossButton closingFormButton"
                         type = "button"
                         key = {Math.floor(Math.random()*1000)}
-                        aria-label='close Form'
-                        onClick={closeTheFormCross}>
-                            <img src={cross} className='iconCross' alt=''/>
+                        aria-label='close Form'>
+                            <img src={cross} className='iconCross closeTheForm' alt=''/>
                          </button>
 
                     </form>

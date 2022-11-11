@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useHistory, useParams } from 'react-router';
-import { selectCards } from '../features/cards/cardsSlice';
+import { selectTasks } from '../features/tasks/tasksSlice';
 import cross from '../assets/cross-icon.svg';
 import { selectColumns } from '../features/columns/columnsSlice';
 
@@ -10,38 +10,19 @@ function EditTaskForm() {
 
     const { taskId }  = useParams();
     const history = useHistory();
-    const allCards = useSelector(selectCards);
-    const allColumns = useSelector(selectColumns)
-    // const presentCard = allCards[taskId];
+    const dispatch = useDispatch();
+    const allTasks = useSelector(selectTasks);
+    const allColumns = useSelector(selectColumns);
 
-    const [presentCard, setPresentCard] = useState({subTasks: []})
-    
+    const [presentTask, setPresentTask] = useState({subTasks: [], boardColumnIds:[]})
+   
+    // initializing the local states with the existing values 
+    // of the selected task to pre-fill the form and to preserv unchanged data
     useEffect(() => { 
-        setPresentCard(allCards[taskId])
+
+        setPresentTask(allTasks[taskId])
+
     },[taskId])
-    
-    // const [nameForTask, setNameForTask] = useState('');
-    // const [subTasks, setSubTasks]       = useState([]);
-
-
-    // // initializing the local states with the existing values 
-    // // of the selected card to pre-fill the form and to preserv unchanged data
-    // useEffect(() => { 
-
-    //     setNameForTask(presentCard.name)
-
-    //      // iterating over all existing subTasks of the selected card to collect the id, name and status
-
-    //     let initialSubTasks = [];
-    //     presentCard.subTasks.map(subTask => initialSubTasks.push( { name: subTask.name,
-    //                                                                 id: subTask.id,
-    //                                                                 status: subTask.status}))
-    //     setSubTasks(initialSubTasks)
-
-
-
-    // }, [taskId])
-
 
 
 
@@ -49,28 +30,28 @@ function EditTaskForm() {
    
 
     // initializing the local states with the existing values 
-    // of the selected card to pre-fill the form and to preserv unchanged data
+    // of the selected task to pre-fill the form and to preserv unchanged data
     
 
   
     const changeTaskName = (e) => {
-        let presentCardCopy = {...presentCard}; // copy to prevent state-mutation
-        presentCardCopy.name = e.target.value;  // change the copy as needed.
-        setPresentCard(presentCardCopy);        // reset the state with the copy
+        let presentTaskCopy = {...presentTask}; // copy to prevent state-mutation
+        presentTaskCopy.name = e.target.value;  // change the copy as needed.
+        setPresentTask(presentTaskCopy);        // reset the state with the copy
     }
 
     const changeSubTaskName = (e) => {
         const index = +e.target.id
-        let presentCardCopy = {...presentCard};             // copy to prevent state-mutation
-        presentCardCopy.subTasks[index].name = e.target.value;// reset the state with the copy
+        let presentTaskCopy = {...presentTask};             // copy to prevent state-mutation
+        presentTaskCopy.subTasks[index].name = e.target.value;// reset the state with the copy
     }
 
 
     const addSubTask = (e) => {
 
         const index = +e.target.id
-        let presentCardCopy = {...presentCard};             // copy to prevent state-mutation
-        presentCardCopy.subTasks.push({ name: e.target.value, 
+        let presentTaskCopy = {...presentTask};             // copy to prevent state-mutation
+        presentTaskCopy.subTasks.push({ name: e.target.value, 
                                         id: Math.floor(Math.random()*1000).toString() })
 
 
@@ -87,17 +68,17 @@ function EditTaskForm() {
     const removeSubTask = (e) => {
 
         const index = +e.target.id
-        let presentCardCopy = {...presentCard};             // copy to prevent state-mutation
-        presentCardCopy.subTasks.splice(index,1);           // remove the indexed element from the array
-        setPresentCard(presentCardCopy)                     // reset the state with the copy
+        let presentTaskCopy = {...presentTask};             // copy to prevent state-mutation
+        presentTaskCopy.subTasks.splice(index,1);           // remove the indexed element from the array
+        setPresentTask(presentTaskCopy)                     // reset the state with the copy
 
     }
 
     const choseTargetColumn = (e) => {
         
-        let presentCardCopy = {...presentCard};             // copy to prevent state-mutation
-        presentCardCopy.ColumnId = e.target.value;
-        setPresentCard(presentCardCopy);                     // reset the state with the copy
+        let presentTaskCopy = {...presentTask};             // copy to prevent state-mutation
+        presentTaskCopy.ColumnId = e.target.value;
+        setPresentTask(presentTaskCopy);                     // reset the state with the copy
 
     }
 
@@ -108,29 +89,30 @@ function EditTaskForm() {
 
     }
 
-    const closeTheFormBackground = (e) => {
+    const closeTheForm = (e) => {
+
+        // close the form on click of 'formBackground' or 'iconCross'
         if (e.target.classList.contains('formBackground') ) {
+            history.goBack() // to close the form
+        }
+        if (e.target.classList.contains('closeTheForm') ) {
             history.goBack() // to close the form
         }
     }
 
-    const closeTheFormCross = (e) => {
-        if (e.target.classList.contains('iconCross') ) {
-            history.goBack() // to close the form
-        }
-    }
+
     return ( 
-        <div className='formBackground' onClick={closeTheFormBackground}>
+        <div className='formBackground' onClick={closeTheForm}>
             <div className='formContainer'>
                 <h3 className='formTitle'>Edit the Task</h3>
                 <form>
         	        
-                    <label for='cardNameInput'>Name</label>
+                    <label for='taskNameInput'>Name</label>
                     <input 
                         key = {33} //{Math.floor(Math.random()*1000)}
                         type='text'
-                        id='cardNameInput'
-                        value={presentCard.name}
+                        id='taskNameInput'
+                        value={presentTask.name}
                         onChange={changeTaskName}
                     />
 
@@ -139,7 +121,7 @@ function EditTaskForm() {
 
                     <label id='columnLabel'>Subtasks</label>
                     <ul>
-                        {presentCard.subTasks
+                        {presentTask.subTasks
                             .filter(subTask => subTask.status === 'open' || subTask.status === 'done')
                             .map((subTask, index) => {
                                 return (
@@ -169,7 +151,7 @@ function EditTaskForm() {
                     </ul>
 
                     <select id='selectStatus' className='selectStatus' onChange={choseTargetColumn}>
-                            {presentCard.boardColumnIds.map(id => {
+                            {presentTask.boardColumnIds.map(id => {
                                 return <option key={id} id={id} value={id}>{allColumns[id].name}</option>
                             })}
                     </select>
@@ -178,9 +160,8 @@ function EditTaskForm() {
                         className = "closingCrossButton closingFormButton"
                         type = "button"
                         key = {Math.floor(Math.random()*1000)}
-                        aria-label='close Form'
-                        onClick={closeTheFormCross}>
-                            <img src={cross} className='iconCross' alt=''/>
+                        aria-label='close Form'>
+                            <img src={cross} className='iconCross closeTheForm' alt=''/>
                     </button> 
                 </form>
             
