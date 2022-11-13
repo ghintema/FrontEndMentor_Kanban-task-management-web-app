@@ -31,17 +31,23 @@ header {
 main {
     display:flex;
     width:100%;
-    height:100vh;
+    height:calc( 100vh - 97px );
     align-items:stretch;
     background-color: #f4f7fd;
 }
 
-aside {width: 25%}
-section {width: 75%}
+
+.logoContainer {
+    flex-basis: 25%;
+    flex-shrink: 0;
+    max-width: 280px;
+    min-width: 180px;
+    overflow: hidden;
+}
+section {flex-basis: 100%}
 
 
 .logoContainer {
-    width:25%;
     padding:32px;
     background-color: white;
     border-right: 1px solid #e4ebfa;
@@ -53,10 +59,122 @@ section {width: 75%}
 
 .navigationContainer {
     width:100%;
-    height: 100%;
+    height: calc( 100vh - 97px );
     background-color: white;
     border-right: 1px solid #e4ebfa;
 }
+
+
+/* Navigation */
+
+h4 {
+    font-size: 15;
+    font-weight: 700;
+    color: #828FA3;
+}
+
+.navigationContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content:flex-start;
+    flex-basis: 25%;
+    flex-shrink: 0;
+    max-width: 280px;
+    min-width: 180px;
+    overflow: hidden;
+}
+
+.hideTheNav {
+    flex-basis:0%; 
+    min-width:0px;
+    overflow: hidden;
+} 
+
+.linkToExistingBoard,
+.linkToCreateNewBoard,
+.navigationHeadline {
+    display:flex;
+    align-items: center;
+    font-size: 15;
+    font-weight: 700;
+    color: #828FA3;
+    border-radius:0 24px 24px 0;
+    margin: 0;
+    width: calc( 100% - 20px);
+    padding:16px 15px 16px 32px; 
+    text-decoration: none;
+}
+
+.activelinkToExistingBoard {
+    background-color: #635FC7;
+    color:white;
+}
+.linkToCreateNewBoard {
+    color:#635fc7;
+}
+
+.iconBoard,
+.iconClosedEye {
+    margin-right: 15px;
+}
+
+
+.nightModeSliderContainer {
+    display: flex;
+    justify-content:center;
+    align-items: center;
+    width: 80%;
+    height: 48px;
+    border-radius: 6px;
+    background-color:#F4F7FD;
+    margin:auto auto 8px;
+}
+
+.nightModeSliderContainer label {
+    margin:0 25px;
+}
+
+
+.buttonHideTheNavExtended {
+    display: flex;
+    align-items:center;
+    justify-content: center;
+    font-size: 15;
+    font-weight: 700;
+    color: #828FA3;
+    height: 48px;
+    border: none;
+    background-color: transparent;
+    margin: 0 auto 50px 30px;
+}
+
+button:hover {
+    cursor: pointer;
+}
+
+.buttonHideTheNavExtended div {
+    display: flex;
+    align-items:center;  
+}
+
+.buttonHideTheNavAbrigded{
+    display: flex;
+    align-items:center;
+    justify-content: center;
+    height: 48px;
+    border: none;
+    background-color: #635FC7;
+    border-radius:0 24px 24px 0;
+    width:56px;
+    position:absolute;
+    bottom:50px;
+    left:0px;
+}
+
+
+
+.buttonHideTheNavAbrigded img {margin:0}
+
 
 
 /* BoardHeader */
@@ -118,7 +236,7 @@ h1 {
     margin:10px;
 }
 
-.columnContainer h2 {
+.columnContainer h4 {
 
     font-weight: 700;
     font-size: 12px;

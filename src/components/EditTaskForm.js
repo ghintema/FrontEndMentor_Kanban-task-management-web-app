@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams, useHistory } from 'react-router-dom';
 import { selectBoards } from '../features/boards/boardsSlice';
-import { selectColumns, addTaskIdToColumn } from '../features/columns/columnsSlice';
+import { selectColumns, addTaskIdToColumn, removeTaskIdFromColumn } from '../features/columns/columnsSlice';
 import { selectTasks, addTaskToTasks } from '../features/tasks/tasksSlice.js';
 import cross from '../assets/cross-icon.svg';
 
@@ -12,6 +12,7 @@ import cross from '../assets/cross-icon.svg';
 // 2.) initialize presentTask with all values according to taskId
 // 3.) function 'saveTheTask' -> was renamed to 'saveTheTask' for more semantic name
 // 4.) button 'Create Task' was renamed to 'Save Changes' for more semantics
+// 5.) the <option> - element has gotten a selected-attribute depending on current column.
 
 function EditTaskForm() {
 
@@ -29,6 +30,7 @@ function EditTaskForm() {
                                             id: allTasks[taskId].id,
                                             description: allTasks[taskId].description, 
                                             columnId: allTasks[taskId].columnId, 
+                                            boardId: boardId,
                                             boardColumnIds: allTasks[taskId].boardColumnIds,
                                             subTasks: allTasks[taskId].subTasks})
    
@@ -74,14 +76,15 @@ function EditTaskForm() {
         setPresentTask(presentTaskCopy);                    // update the state with the copy
     }
 
-    const saveTheTask = () => {
-
-        // create the new card...
+    const storeChanges = () => {
+        
+        // updating the tasks-slice with the presentTask.
         dispatch(addTaskToTasks({...presentTask}))
 
-        // let the column know, there is a new card to be rendered
-        dispatch(addTaskIdToColumn([presentTask.columnId, presentTask.id]))
-        
+        // updating the column-slice, removing the task.id from former column and adding the task.id to next column 
+        dispatch(removeTaskIdFromColumn([allTasks[taskId].columnId, presentTask.id])) // update the former column, that the task was removed
+        dispatch(addTaskIdToColumn([presentTask.columnId, presentTask.id])); // update the next column, that the task was added 
+
         // close the form
         history.goBack()
     }
@@ -157,14 +160,19 @@ function EditTaskForm() {
                         <label for='selectStatus'>Status</label>
                         <select id='selectStatus' className='selectStatus' onChange={choseTargetColumn}>
                             {allBoards[boardId].columnIds.map(id => {
-                                return <option key={id} id={id} value={id}>{allColumns[id].name}</option>
+                                return <option 
+                                            key={id} id={id} 
+                                            value={id}
+                                            selected={id == presentTask.columnId ? true : false}>
+                                            {allColumns[id].name}
+                                        </option>
                             })}
                         </select>
                         <button 
                             className = "formButton createNewButton"
                             type = "button"
                             key = {Math.floor(Math.random()*1000)}
-                            onClick={saveTheTask}>
+                            onClick={storeChanges}>
                             Save the Changes
                         </button>
                         <button 

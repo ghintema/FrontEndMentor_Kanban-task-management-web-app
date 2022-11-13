@@ -24,6 +24,7 @@ function ShowTask() {
                                                     id: allTasks[taskId].id,
                                                     description: allTasks[taskId].description, 
                                                     columnId: allTasks[taskId].columnId, 
+                                                    boardId: boardId,
                                                     boardColumnIds: allTasks[taskId].boardColumnIds,
                                                     subTasks: allTasks[taskId].subTasks})
    

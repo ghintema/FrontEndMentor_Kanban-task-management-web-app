@@ -19,7 +19,8 @@ function NewTaskForm() {
     const [newTask, setNewTask] = useState({name:'task name', 
                                             id: Math.floor(Math.random()*1000).toString(),
                                             description:'This is to be done', 
-                                            columnId:allBoards[boardId].columnIds[0], 
+                                            columnId:allBoards[boardId].columnIds[0],
+                                            boardId: boardId, 
                                             boardColumnIds:allBoards[boardId].columnIds, 
                                             subTasks: [ {name: '', 
                                                         id: Math.floor(Math.random()*1000).toString(), 
@@ -69,10 +70,10 @@ function NewTaskForm() {
 
     const createTheTask = () => {
 
-        // create the new card...
+        // updating the tasks-slice with the newTask.
         dispatch(addTaskToTasks({...newTask}))
 
-        // let the column know, there is a new card to be rendered
+        // updating the column-slice with the new task.id
         dispatch(addTaskIdToColumn([newTask.columnId, newTask.id]))
         
         // close the form

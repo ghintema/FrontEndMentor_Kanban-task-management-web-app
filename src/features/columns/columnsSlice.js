@@ -18,7 +18,10 @@ export const columnsSlice = createSlice({
         },
         addTaskIdToColumn(columns, action) {
             const [ columnId, taskId ] = action.payload;
-            columns[columnId].taskIds.push(taskId)
+                // preventing to duplicates
+            if (!columns[columnId].taskIds.includes(taskId)) {
+                columns[columnId].taskIds.push(taskId);
+            }
         },
         removeTaskIdFromColumn(columns, action) {
             const [ columnId, taskId ] = action.payload;

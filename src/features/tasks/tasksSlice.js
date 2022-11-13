@@ -5,10 +5,9 @@ const initialState = {'123': {name:'task name',
                               description:'This is to be done', 
                               columnId:'', 
                               boardColumnIds:[''], 
-                              subTasks:{'321': 
-                                {name: 'sub task', 
-                                 id:'321', 
-                                 status: 'open'}}}};
+                              subTasks:[{name: 'sub task', 
+                              id:'321', 
+                              status: 'open'}]}};
 
 
 // every task has exactly and always ONE columnId (the one it is sittin on) but can have zero to whatever columnIds, wich are potential new target-columns insige the board. This is important as selection-options for a column change.
@@ -27,7 +26,10 @@ export const tasksSlice = createSlice({
         },
         addBoardColumnIdToTask(tasks, action) { 
             const [ taskId, columnId ] = action.payload;
-            tasks[taskId].boardColumnIds.push(columnId);
+                // preventing to duplicates
+            if (!tasks[taskId].boardColumnIds.includes(columnId)) {
+                tasks[taskId].boardColumnIds.push(columnId);
+            }
         },
         removeBoardColumnIdFromTask(tasks, action) {
             const [ taskId, columnId ] = action.payload;

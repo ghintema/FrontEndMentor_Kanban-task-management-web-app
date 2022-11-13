@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams, useHistory } from 'react-router';
-import { selectBoards } from '../features/boards/boardsSlice'
-import { selectColumns } from '../features/columns/columnsSlice'
-import { addBoardToBoards } from '../features/boards/boardsSlice';
-import { addColumnToColumns } from '../features/columns/columnsSlice';
+import { selectBoards, addBoardToBoards } from '../features/boards/boardsSlice'
+import { selectColumns, addColumnToColumns } from '../features/columns/columnsSlice'
+import { selectTasks, addBoardColumnIdToTask } from '../features/tasks/tasksSlice';
 import cross from '../assets/cross-icon.svg';
 
 
@@ -14,6 +13,7 @@ function EditBoardForm() {
     const allBoards = useSelector(selectBoards);
     const presentBoard = allBoards[boardId];
     const allColumns = useSelector(selectColumns);
+    const allTasks = useSelector(selectTasks);
     const dispatch = useDispatch();
     const history = useHistory();
     const [nameForBoard, setNameForBoard] =       useState('');
@@ -65,22 +65,31 @@ function EditBoardForm() {
 
     const storeChanges = () => {
 
+    
+        // updating the board-slice with the newColumnConfig.
         // overriding the existing board with old id but new name and columnIds
         dispatch(addBoardToBoards({name:nameForBoard, id: boardId, columnIds: newColumnConfig.map(el => el.id)}))
 
-         // create all the new columns
-
-
-         // it musst be checked wether or not the columId existed bevore. If so, it's crucial to pass the existing taskIds. Otherwise you empty all columns when editing the board.
-
+         // updating the column-slice with the newColumnConfig. There is a duplicate-check in the reducer.
          newColumnConfig.forEach((column) => {
             dispatch(addColumnToColumns({name: column.name, id: column.id.toString(), taskIds:column.taskIds}))
         })
+
+        // updating the task-slice with the newColumnConfig. There is a duplicate-check in the reducer.
+        // all tasks in a board need to be aware of all columns in that board to be able to change the tasks column.
+        Object.values(allTasks).filter(task => task.boardId === boardId)
+                                .forEach(task => {
+                                    newColumnConfig.forEach(columnId => {
+                                        dispatch(addBoardColumnIdToTask([task.id, columnId.id ]))})
+                                    })
+
 
         history.goBack() // to close the form.
     }
 
     const closeTheForm = (e) => {
+
+
 
         // close the form on click of 'formBackground' or 'iconCross'
         if (e.target.classList.contains('formBackground') ) {

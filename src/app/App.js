@@ -31,16 +31,12 @@ function App() {
             </Route>
           </header>
           <main >
-            <aside >
               <Route path="/:boardId?">
                 <Navigation />
               </Route>
-            </aside>
-            <section>
               <Route path="/:boardId?">
                 <Board />
               </Route>
-            </section>
           </main>
         </div>
 

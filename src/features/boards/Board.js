@@ -32,13 +32,13 @@ function Board() {
     const boardIsEmpty = columnsToBeRendered.length === 0;
 
     return ( 
-        <div className='boardContainer'>
+        <section className='boardContainer'>
             { !boardIdPlausible ? <NoBoard /> : 
              boardIsEmpty ? <EmptyBoard /> : (
              columnsToBeRendered.map((id) => <Column id={id} key={id} />)
              )}
             
-        </div>
+        </section>
      );
 } 
 

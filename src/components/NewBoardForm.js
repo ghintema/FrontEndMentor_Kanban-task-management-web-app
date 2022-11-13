@@ -44,25 +44,18 @@ function NewBoardForm() {
 
         const newBoardsId = Math.floor(Math.random()*1000).toString();
 
-        // create the new Board
+        // updating the board-slice with the new board.
         dispatch(addBoardToBoards({name:nameForNewBoard, 
                                    id: newBoardsId, 
                                    columnIds: namesForNewColumns.map(el => el.id)}))
 
 
-        // create all the new columns
+        // update the column-slice with all the new columns.
         namesForNewColumns.forEach((column) => {
             dispatch(addColumnToColumns({name: column.name, id: column.id.toString(), taskIds:[]}))
         })
 
-        // reset the form
-        setNamesForNewColumns([ {name: 'ToDo',  id:Math.floor(Math.random()*1000) },
-                                {name: 'Doing', id:Math.floor(Math.random()*1000) },
-                                {name: 'Done',  id:Math.floor(Math.random()*1000) }])
-
-        // close the form
-
-        history.goBack();
+        history.goBack();        // close the form
     }
 
     const closeTheForm = (e) => {
