@@ -25,7 +25,7 @@ export const columnsSlice = createSlice({
         },
         removeTaskIdFromColumn(columns, action) {
             const [ columnId, taskId ] = action.payload;
-            columns[columnId].taskIds = columns[columnId].taskIds.filter(id => id !== taskId )
+            columns[columnId].taskIds = columns[columnId].taskIds.filter(id => id != taskId )
         },
         setColumnName(columns, action) {
             const [ columnId, newName ] = action.payload;

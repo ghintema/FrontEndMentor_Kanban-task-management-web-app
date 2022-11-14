@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useParams, useHistory } from 'react-router-dom';
 import { selectBoards, removeBoardFromBoards } from '../features/boards/boardsSlice';
 import { selectColumns, addTaskIdToColumn, removeTaskIdFromColumn } from '../features/columns/columnsSlice';
-import { selectTasks, addTaskToTasks } from '../features/tasks/tasksSlice.js';
+import { selectTasks, removeTaskFromTasks } from '../features/tasks/tasksSlice.js';
 import cross from '../assets/cross-icon.svg';
 
 
@@ -20,6 +20,15 @@ function DeleteTask() {
 
     const deleteTask = () => {
         console.log('deleteBoard')
+
+        // updating the column-slice by removing the taskId from the corresponding column.
+        dispatch(removeTaskIdFromColumn([allTasks[taskId].columId, taskId]))
+        
+        // updating the task-slice by removing the task.
+        dispatch(removeTaskFromTasks(taskId))
+
+        history.push(`/${boardId}`)
+
     }
 
     const closeTheForm = (e) => {
