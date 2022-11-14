@@ -55,7 +55,8 @@ function NewBoardForm() {
             dispatch(addColumnToColumns({name: column.name, id: column.id.toString(), taskIds:[]}))
         })
 
-        history.goBack();        // close the form
+
+        history.push(`/${newBoardsId}`);        // close the form and show the newly created board
     }
 
     const closeTheForm = (e) => {

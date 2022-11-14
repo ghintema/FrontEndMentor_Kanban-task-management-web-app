@@ -14,7 +14,7 @@ export const boardsSlice = createSlice({
             // boards = newBoards;
         },
         removeBoardFromBoards(boards, action) {
-            const boardIdToDelete = action.payload.id;
+            const boardIdToDelete = action.payload;
             delete boards[boardIdToDelete];
         },
         addColumnToBoard(boards, action) {

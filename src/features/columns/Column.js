@@ -17,7 +17,7 @@ function Column(props) {
             <div className='columnContainer'> 
                 <h4>{allColumns[id].name}</h4>
                 <ul>
-                    {columnIsEmpty ? <li>No tasks</li> :
+                    {
                         taskIdsOfTheColumn.map(id => <li key={id + 1}><Task id={id} key={id + 2} /></li>)
                     }
                 </ul>

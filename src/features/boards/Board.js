@@ -1,8 +1,9 @@
 import React from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { selectBoards } from './boardsSlice';
 import { selectColumns } from '../columns/columnsSlice';
+import { setSubMenuVisibility } from '../options/optionsSlice';
 import { Column } from '../columns/Column';
 import { EmptyBoard } from '../../components/EmptyBoard'
 import { NoBoard } from '../../components/NoBoard'
@@ -15,6 +16,7 @@ function Board() {
 
     const allBoards = useSelector(selectBoards);
     const { boardId } = useParams()
+    const dispatch = useDispatch();
 
    
 
@@ -32,7 +34,7 @@ function Board() {
     const boardIsEmpty = columnsToBeRendered.length === 0;
 
     return ( 
-        <section className='boardContainer'>
+        <section className='boardContainer' onClick={() => dispatch(setSubMenuVisibility(false)) }>
             { !boardIdPlausible ? <NoBoard /> : 
              boardIsEmpty ? <EmptyBoard /> : (
              columnsToBeRendered.map((id) => <Column id={id} key={id} />)

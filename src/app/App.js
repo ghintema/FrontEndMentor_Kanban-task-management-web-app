@@ -11,6 +11,8 @@ import { ShowTask } from '../components/ShowTask';
 import { Logo } from '../components/Logo.js';
 import { BoardHeader } from '../components/BoardHeader.js'
 import { Board } from '../features/boards/Board'
+import { DeleteBoard } from '../components/DeleteBoard.js'
+import { DeleteTask } from '../components/DeleteTask.js'
 
 
 function App() {
@@ -48,6 +50,12 @@ function App() {
         </Route>
         <Route path="/:boardId/NewTaskForm">
           <NewTaskForm />
+        </Route>
+        <Route path="/:boardId/DeleteBoard">
+          <DeleteBoard />
+        </Route>
+        <Route path="/:boardId/:taskId/DeleteTask">
+          <DeleteTask />
         </Route>
         <Route path="/:boardId/:taskId/ShowTask">
           <ShowTask />

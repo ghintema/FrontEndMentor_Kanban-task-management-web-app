@@ -58,10 +58,7 @@ section {flex-basis: 100%}
 }
 
 .navigationContainer {
-    width:100%;
-    height: calc( 100vh - 97px );
-    background-color: white;
-    border-right: 1px solid #e4ebfa;
+ 
 }
 
 
@@ -81,6 +78,9 @@ h4 {
     flex-shrink: 0;
     max-width: 280px;
     min-width: 180px;
+    height: calc( 100vh - 97px );
+    background-color: white;
+    border-right: 1px solid #e4ebfa;
     overflow: hidden;
 }
 
@@ -88,6 +88,8 @@ h4 {
     flex-basis:0%; 
     min-width:0px;
     overflow: hidden;
+    visibility: hidden;
+    transition: min-width 0.1s;
 } 
 
 .linkToExistingBoard,
@@ -101,12 +103,18 @@ h4 {
     border-radius:0 24px 24px 0;
     margin: 0;
     width: calc( 100% - 20px);
-    padding:16px 15px 16px 32px; 
+    padding:15px 15px 15px 32px; 
+    margin:0px 0;
     text-decoration: none;
 }
 
+
+.navLinkHovered {
+    background-color: #efeff7 !important; /* important is needed to override the background-color in class .buttonHideTheNavExtended */
+}
+
 .activelinkToExistingBoard {
-    background-color: #635FC7;
+    background-color: #635FC7!important; /* important is needed here to override the background-color in .navLinkHovered. Otherwise the active-marked link would furthermore show hover-properties. */
     color:white;
 }
 .linkToCreateNewBoard {
@@ -144,9 +152,13 @@ h4 {
     color: #828FA3;
     height: 48px;
     border: none;
-    background-color: transparent;
-    margin: 0 auto 50px 30px;
+    background-color:transparent;
+    border-radius:0 24px 24px 0;
+    margin: 0 auto 20px 0px;
+    padding-left:25px;
+    padding-right: 20px;
 }
+
 
 button:hover {
     cursor: pointer;
@@ -169,6 +181,7 @@ button:hover {
     position:absolute;
     bottom:50px;
     left:0px;
+    visibility: visible;
 }
 
 
@@ -179,11 +192,14 @@ button:hover {
 
 /* BoardHeader */
 .boardHeaderContainer {
-    display:flex;
+    /* display:flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: space-between; */
+    display:grid;
+    grid-template-columns: 1fr 175px 50px;
+    align-items: center;
     padding: 24px;
-    width:75%;
+    width:100%;
     height: 97px;
     border-bottom: 1px solid #e4ebfa;
 }
@@ -200,15 +216,62 @@ h1 {
     align-items:center;
     justify-content:center;
     text-decoration: none;
-    font-weight: 700
+    font-weight: 700;
+    margin-right: 24px;
 }
 
+.buttonOpenSubMenu {
+    width:20px;
+    background-color: transparent;
+    border: none;
+}
+
+.iconDoener {
+    width:5px;
+}
+
+.subMenuContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content:space-around;
+    position:absolute;
+    top:35px;
+    right:0px;
+    width:192px;
+    height: 92px;
+    padding: 16px;
+    background-color:white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 4px 4px 20px 0px rgba(0, 0, 255, .2);
+}
+
+.subMenuInvisible {
+    visibility: hidden; /* to prevent focus on hidden elemet */
+    padding:0;
+    max-height: 0px;
+    transition: max-height 0.1s;
+  
+}
+
+.subMenuVisible {
+    max-height: 100px;
+    transition: max-height 0.2s;
+}
+
+.subMenuButton {
+    font-size:13px;
+    color:#828FA3;
+    text-decoration: none;
+    line-height: 23px;
+}
 
 /* Board area*/
 
 .boardContainer {
-    height:calc(100% - 97px);
     display: flex;
+    height:calc(100vh - 97px);
+    overflow: auto;
 }
 
 .emptyBoardContainer {
@@ -228,8 +291,11 @@ h1 {
 }
 
 .columnContainer {
+
     /* display: flex; */
-    width: 150px;
+    flex-basis: 150px;
+    min-width: 100px;
+    max-width: 200px;
     border-radius: 15px;
     /* border: 1px solid black;
     background-color: white; */
@@ -266,7 +332,7 @@ h1 {
 .taskContainer p {
     font-size: 12px;
     font-weight: 700;
-    color: #828FA3
+    color: #828FA3;
 }
 
 
@@ -368,8 +434,7 @@ li input[type=text] {
 .closingFormButton {
     position:absolute;
     top:30px;
-    right:30px;
-    
+    right:30px; 
 }
 
 .formButton {
@@ -411,15 +476,38 @@ textarea {
 }
 
 
-
-
-/* Naviagation area */
-
-.linkToExistingBoard {
-
+.deleteHeadline{
+    color:#EA5555;
+    font-size:18px;
+    font-weight: 700;
 }
 
-.linkToCreateNewBoard {
-
+.deleteText {
+    font-size:13px;
+    line-height: 23px;
+    margin:24px 0;
 }
+
+.deleteButton,
+.cancelButton {
+    width: calc( 50% - 20px);
+    height: 40px;
+    border-radius: 20px;
+    margin:8px;
+    font-size:13px;
+    font-weight: 700;
+    border:none;
+}
+
+.deleteButton {
+    color:white;
+    background-color: #EA5555;
+    float: left;
+}
+
+.cancelButton {
+    color: #635fc7;
+    background-color: #efeff9;
+}
+
 

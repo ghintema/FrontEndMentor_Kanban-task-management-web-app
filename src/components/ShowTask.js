@@ -5,6 +5,8 @@ import { Link } from 'react-router-dom';
 import { addTaskToTasks, selectTasks } from '../features/tasks/tasksSlice';
 import { selectBoards } from '../features/boards/boardsSlice'
 import { addTaskIdToColumn, removeTaskIdFromColumn, selectColumns } from '../features/columns/columnsSlice';
+import { setSubMenuVisibility } from '../features/options/optionsSlice'
+import { SubMenu } from './SubMenu';
 import cross from '../assets/cross-icon.svg';
 
 
@@ -76,10 +78,17 @@ function ShowTask() {
         }
     }
 
+    const closeSubMenu = (e) => {
+        if (e.target.classList.contains('formContainer') ) {
+            dispatch(setSubMenuVisibility(false))
+        }
+    }
+
 
     return ( 
         <div className='formBackground' onClick={closeTheForm} >
-            <div className='formContainer'>
+            <div className='formContainer' onClick={closeSubMenu}>
+                <SubMenu useCase='task' top='30px' right='30px' />
                 <h3 className='formTitle'>{presentTask.name}</h3>
 
 
@@ -125,20 +134,6 @@ function ShowTask() {
                                 </option>
                     })}
                 </select>
-
-                <Link to={'/'+boardId + '/' + taskId + '/EditTaskForm'}>
-                    More Editing...
-                </Link>
-                    
-                <button 
-                    className = "closingCrossButton closingFormButton"
-                    type = "button"
-                    key = {Math.floor(Math.random()*1000)}
-                    aria-label='close Form'
-                    // onClick={closeTheFormCross}
-                    >
-                        <img src={cross} className='iconCross closeTheForm' alt=''/>
-                </button> 
         
             
             </div>

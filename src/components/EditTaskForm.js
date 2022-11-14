@@ -15,7 +15,7 @@ import cross from '../assets/cross-icon.svg';
 // 5.) the <option> - element has gotten a selected-attribute depending on current column.
 
 function EditTaskForm() {
-
+    
     const history = useHistory();
     const dispatch = useDispatch();
     const { boardId } = useParams(); 
@@ -103,7 +103,8 @@ function EditTaskForm() {
 
     return ( 
         <div className='formBackground' onClick={closeTheForm}>
-            <div className='formContainer'>
+            <div className='formContainer' >
+               
                 <h3 className='formTitle'>Edit the Task here</h3>
                     <form>
         	        
@@ -151,10 +152,10 @@ function EditTaskForm() {
                         </ul>
 
                         <button
-                        className = "formButton addNewButton" 	
-                        type = "button"
-                        key = {Math.floor(Math.random()*1000)}
-                        onClick={addSubTask}>
+                            className = "formButton addNewButton" 	
+                            type = "button"
+                            key = {Math.floor(Math.random()*1000)}
+                            onClick={addSubTask}>
                         Add more sub tasks
                         </button>
                         <label for='selectStatus'>Status</label>
@@ -168,6 +169,7 @@ function EditTaskForm() {
                                         </option>
                             })}
                         </select>
+
                         <button 
                             className = "formButton createNewButton"
                             type = "button"
@@ -175,13 +177,8 @@ function EditTaskForm() {
                             onClick={storeChanges}>
                             Save the Changes
                         </button>
-                        <button 
-                        className = "closingCrossButton closingFormButton"
-                        type = "button"
-                        key = {Math.floor(Math.random()*1000)}
-                        aria-label='close Form'>
-                            <img src={cross} className='iconCross closeTheForm' alt=''/>
-                         </button>
+                        
+                        {/* Fehlt hier nicht ein save-button?? */}
 
                     </form>
             </div>

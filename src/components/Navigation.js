@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useSelector, dispatch, useDispatch } from 'react-redux';
 import { selectBoards } from '../features/boards/boardsSlice';
 import { selectOptions } from '../features/options/optionsSlice';
@@ -33,16 +33,19 @@ function Navigation() {
         dispatch(toggleNavVisibility())
     }
 
-    
+    let hover = false;
 
     return ( 
-        <aside className={options.navVisibility ?  'navigationContainer' : 'hideTheNav'}>
+        <aside  className={options.navVisibility ?  'navigationContainer' : 'hideTheNav'}
+                aria-hidden={!options.navVisibility}>
             <h4 className='navigationHeadline'>{`All Boards(${numOfBoards}) `}</h4>
             <ul>
             {Object.values(allBoards).map((board) => {
                 return  <li className='navItem' key={board.id}> 
                             <NavLink className='linkToExistingBoard'
                                     activeClassName='activelinkToExistingBoard' 
+                                    onMouseEnter={(e) => e.target.classList.add('navLinkHovered')}
+                                    onMouseLeave={(e) => e.target.classList.remove('navLinkHovered')}
                                     to={board.id} key={board.id + 3}>
                                 <img src={iconBoard} className='iconBoard' key={board.id + 2} alt=''/>
 
@@ -51,7 +54,10 @@ function Navigation() {
                         </li>
             })}
             <li className='navItem'>
-                <NavLink className='linkToCreateNewBoard' to= {linkToCreateNewBoard}>
+                <NavLink className='linkToCreateNewBoard'
+                        to= {linkToCreateNewBoard}
+                        onMouseEnter={(e) => e.target.classList.add('navLinkHovered')}
+                        onMouseLeave={(e) => e.target.classList.remove('navLinkHovered')}>
                     <img src={iconBoard} className='iconBoard' key={33} alt=''/>
                     + Create New Board
                 </NavLink>
@@ -60,9 +66,9 @@ function Navigation() {
             
             <div className='nightModeSliderContainer'>
                 <img src={iconSun} alt='' />
-                <label class="switch">
+                <label className="switch">
                     <input type="checkbox"  />
-                    <span class="slider round"></span>
+                    <span className="slider round"></span>
                 </label>
                 <img src={iconMoon} alt='' />
             </div>
@@ -71,6 +77,11 @@ function Navigation() {
             <button 
                 className={options.navVisibility ? 'buttonHideTheNavExtended' : 'buttonHideTheNavAbrigded'} 
                 onClick={hideNavigation}
+                onMouseEnter={(e) => {
+                    if (options.navVisibility) {
+                        e.target.classList.add('navLinkHovered')
+                    }}}
+                onMouseLeave={(e) => e.target.classList.remove('navLinkHovered')}
                 key={34}>
                     {options.navVisibility && <div><img src={iconClosedEye} className='iconClosedEye' key={35} alt=''/> 
                                                 <span>Hide the Sidebar</span></div>}
