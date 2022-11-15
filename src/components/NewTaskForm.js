@@ -1,11 +1,12 @@
-import React from 'react';
-import { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams, useHistory } from 'react-router-dom';
 import { selectBoards } from '../features/boards/boardsSlice';
 import { selectColumns, addTaskIdToColumn } from '../features/columns/columnsSlice';
+import { selectOptions } from '../features/options/optionsSlice';
 import { addTaskToTasks } from '../features/tasks/tasksSlice'
 import cross from '../assets/cross-icon.svg';
+import { allColorSchemes }  from '../colorScheme';
 
 
 function NewTaskForm() {
@@ -15,7 +16,8 @@ function NewTaskForm() {
     const { boardId } = useParams(); 
     const allBoards = useSelector(selectBoards);
     const allColumns = useSelector(selectColumns);
-    
+    const options = useSelector(selectOptions);
+    const [ colorScheme, setColorScheme ] = useState({});
     const [newTask, setNewTask] = useState({name:'task name', 
                                             id: Math.floor(Math.random()*1000).toString(),
                                             description:'This is to be done', 
@@ -26,6 +28,29 @@ function NewTaskForm() {
                                                         id: Math.floor(Math.random()*1000).toString(), 
                                                         status: 'open'} ]})
    
+    useEffect(() => {
+
+        if (options.nightMode) {
+            setColorScheme({'main':             allColorSchemes.main.nightMode,
+                            'main2':            allColorSchemes.main2.nightMode,
+                            'buttonPrimary':    allColorSchemes.buttonPrimary.nightMode,
+                            'buttonSecondary':  allColorSchemes.buttonSecondary.nightMode,
+                            'label':            allColorSchemes.label.nightMode});
+        } else if (!options.nightMode) {
+            setColorScheme({'main':             allColorSchemes.main.dayMode,
+                            'buttonPrimary':    allColorSchemes.buttonPrimary.dayMode,
+                            'buttonSecondary':  allColorSchemes.buttonSecondary.nightMode,
+                            'label':            allColorSchemes.label.dayMode});
+        }
+
+    },[options.nightMode])
+
+
+
+
+
+
+
     const changeTaskName = (e) => {
         const newTaskCopy = {...newTask};           // copy to prevent state-mutation
         newTaskCopy.name = e.target.value;          // change the copy as needed.
@@ -94,12 +119,13 @@ function NewTaskForm() {
 
     return ( 
         <div className='formBackground' onClick={closeTheForm}>
-            <div className='formContainer'>
-                <h3 className='formTitle'>Define a new Task here</h3>
+            <div className='formContainer' style={colorScheme.main}>
+                <h3 className='formTitle' style={colorScheme.main}>Define a new Task here</h3>
                     <form>
         	        
-                        <label for='taskNameInput'>Name</label>
+                        <label htmlFor='taskNameInput'>Name</label>
                         <input 
+                            style={colorScheme.main}
                             key = {33} 
                             type='text'
                             id='taskNameInput'
@@ -107,8 +133,10 @@ function NewTaskForm() {
                             autoFocus
                             onChange={changeTaskName}
                         />
-                        <label for='descriptionInput'>description</label>
-                        <textarea 
+                        <label htmlFor='descriptionInput'>description</label>
+                        <textarea
+                            style={colorScheme.main}
+                            id='descriptionInput' 
                             cols='20'
                             rows='3'
                             onChange={changeTaskDescription}>
@@ -121,6 +149,7 @@ function NewTaskForm() {
                                      <li key={subTask.id + 0}>
                                         <input
                                             className='inputField subInput'
+                                            style={colorScheme.main}
                                             key = {subTask.id + 1}
                                             type='text'
                                             id={index}
@@ -142,16 +171,25 @@ function NewTaskForm() {
                         </ul>
 
                         <button
-                        className = "formButton addNewButton" 	
-                        type = "button"
-                        key = {Math.floor(Math.random()*1000)}
-                        onClick={addSubTask}>
-                        Add more sub tasks
+                            className = "formButton addNewButton"
+                            style={colorScheme.buttonSecondary} 	
+                            type = "button"
+                            key = {Math.floor(Math.random()*1000)}
+                            onClick={addSubTask}>
+                            Add more sub tasks
                         </button>
-                        <label for='selectStatus'>Status</label>
-                        <select id='selectStatus' className='selectStatus' onChange={choseTargetColumn}>
+                        <label htmlFor='selectStatus'>Status</label>
+                        <select id='selectStatus' 
+                                className='selectStatus'
+                                style={colorScheme.main} 
+                                onChange={choseTargetColumn}>
                             {allBoards[boardId].columnIds.map(id => {
-                                return <option key={id} id={id} value={id}>{allColumns[id].name}</option>
+                                return <option 
+                                            key={id} id={id} 
+                                            value={id}
+                                            style={colorScheme.main2}>
+                                                {allColumns[id].name}
+                                        </option>
                             })}
                         </select>
                         <button 
@@ -159,14 +197,14 @@ function NewTaskForm() {
                             type = "button"
                             key = {Math.floor(Math.random()*1000)}
                             onClick={createTheTask}>
-                            Create the Task
+                                Create the Task
                         </button>
                         <button 
-                        className = "closingCrossButton closingFormButton"
-                        type = "button"
-                        key = {Math.floor(Math.random()*1000)}
-                        aria-label='close Form'>
-                            <img src={cross} className='iconCross closeTheForm' alt=''/>
+                            className = "closingCrossButton closingFormButton"
+                            type = "button"
+                            key = {Math.floor(Math.random()*1000)}
+                            aria-label='close Form'>
+                                <img src={cross} className='iconCross closeTheForm' alt=''/>
                          </button>
 
                     </form>

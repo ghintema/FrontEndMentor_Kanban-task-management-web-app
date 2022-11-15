@@ -5,9 +5,10 @@ import { Link } from 'react-router-dom';
 import { addTaskToTasks, selectTasks } from '../features/tasks/tasksSlice';
 import { selectBoards } from '../features/boards/boardsSlice'
 import { addTaskIdToColumn, removeTaskIdFromColumn, selectColumns } from '../features/columns/columnsSlice';
-import { setSubMenuVisibility } from '../features/options/optionsSlice'
+import { setSubMenuVisibility, selectOptions } from '../features/options/optionsSlice'
 import { SubMenu } from './SubMenu';
 import cross from '../assets/cross-icon.svg';
+import { allColorSchemes }  from '../colorScheme';
 
 
 function ShowTask() {
@@ -19,7 +20,8 @@ function ShowTask() {
     const allTasks = useSelector(selectTasks);
     const allBoards = useSelector(selectBoards);
     const allColumns = useSelector(selectColumns);
-
+    const options = useSelector(selectOptions);
+    const [ colorScheme, setColorScheme ] = useState({});
     // initializing the local states with the existing values 
     // of the selected task to pre-fill the form and to preserv unchanged data
     const [presentTask, setPresentTask] = useState({name: allTasks[taskId].name, 
@@ -30,10 +32,23 @@ function ShowTask() {
                                                     boardColumnIds: allTasks[taskId].boardColumnIds,
                                                     subTasks: allTasks[taskId].subTasks})
    
-  
+    useEffect(() => {
 
-    console.log(allTasks)
-    console.log(presentTask)
+        if (options.nightMode) {
+            setColorScheme({'main':             allColorSchemes.main.nightMode,
+                            'main2':            allColorSchemes.main2.nightMode,
+                            'buttonPrimary':    allColorSchemes.buttonPrimary.nightMode,
+                            'buttonSecondary':  allColorSchemes.buttonSecondary.nightMode,
+                            'label':            allColorSchemes.label.nightMode});
+        } else if (!options.nightMode) {
+            setColorScheme({'main':             allColorSchemes.main.dayMode,
+                            'buttonPrimary':    allColorSchemes.buttonPrimary.dayMode,
+                            'buttonSecondary':  allColorSchemes.buttonSecondary.nightMode,
+                            'label':            allColorSchemes.label.dayMode});
+        }
+
+    },[options.nightMode])
+
 
     const changeSubTaskStatus = (e) => {
 
@@ -87,9 +102,9 @@ function ShowTask() {
 
     return ( 
         <div className='formBackground' onClick={closeTheForm} >
-            <div className='formContainer' onClick={closeSubMenu}>
+            <div className='formContainer' style={colorScheme.main} onClick={closeSubMenu}>
                 <SubMenu useCase='task' top='30px' right='30px' />
-                <h3 className='formTitle'>{presentTask.name}</h3>
+                <h3 className='formTitle' style={colorScheme.main}>{presentTask.name}</h3>
 
 
                 <p className='taskDescription'>{presentTask.description} </p>    {/* description here */}
@@ -100,6 +115,7 @@ function ShowTask() {
                         return (
                             <li 
                                 className='subTaskPresentation'
+                                style={colorScheme.main2}
                                 key={subTask.id + 0}
                             >
                                 <input 
@@ -110,9 +126,11 @@ function ShowTask() {
                                     checked={subTask.status === 'done' ? true : false }
                                 />
                                 <label
-                                    for={index}
-                                    id={index}
                                     className={subTask.status === 'open' ? 'subTaskOpen' : 'subTaskDone'}
+                                    style={colorScheme.main2}
+                                    htmlFor={index}
+                                    id={index}
+                                    
                                 >
                                     {subTask.name}
                                 </label>
@@ -124,9 +142,13 @@ function ShowTask() {
 
                 <label>current status</label>
 
-                <select id='selectStatus' className='selectStatus' onChange={choseTargetColumn}>
+                <select id='selectStatus' 
+                        className='selectStatus'
+                        style={colorScheme.main} 
+                        onChange={choseTargetColumn}>
                     {presentTask.boardColumnIds.map(id => {
                         return <option 
+                                    style={colorScheme.main2}
                                     key={id} id={id} 
                                     value={id}
                                     selected={id == presentTask.columnId ? true : false}

@@ -1,16 +1,35 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { useSelector } from 'react-redux';
-import columnsSlice from './columnsSlice';
 import { selectColumns } from './columnsSlice'
+import { selectOptions } from '../options/optionsSlice';
+import  { allColorSchemes }  from '../../colorScheme';
 import { Task } from '../tasks/Task.js';
 
 function Column(props) {
     
     const id = props.id
     const allColumns = useSelector(selectColumns);
+    const options = useSelector(selectOptions);
     const taskIdsOfTheColumn = allColumns[id].taskIds;
     const columnIsEmpty = taskIdsOfTheColumn.length === 0;
     
+    const [ colorScheme, setColorScheme ] = useState({});
+
+    useEffect(() => {
+
+        if (options.nightMode) {
+            setColorScheme({'main':             allColorSchemes.main.nightMode,
+                            'buttonPrimary':    allColorSchemes.buttonPrimary.nightMode,
+                            'buttonSecondary':  allColorSchemes.buttonSecondary.nightMode,
+                            'label':            allColorSchemes.label.nightMode});
+        } else if (!options.nightMode) {
+            setColorScheme({'main':             allColorSchemes.main.dayMode,
+                            'buttonPrimary':    allColorSchemes.buttonPrimary.dayMode,
+                            'buttonSecondary':  allColorSchemes.buttonSecondary.nightMode,
+                            'label':            allColorSchemes.label.dayMode});
+        }
+
+    },[options.nightMode])
 
     return ( 
         

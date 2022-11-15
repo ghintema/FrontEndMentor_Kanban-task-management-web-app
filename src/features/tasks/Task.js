@@ -1,27 +1,45 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import ReactDOM from 'react-dom'
 import { useLocation, Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { selectTasks } from './tasksSlice';
+import { selectOptions } from '../options/optionsSlice';
+import  { allColorSchemes }  from '../../colorScheme';
 
 
 function Task ( props ) {
 
     const taskId = props.id;
-    const location = useLocation()
+    const location = useLocation();
     const boardId = location.pathname;
     const allTasks = useSelector(selectTasks);
-    const taskToBeRendered = allTasks[taskId];
+    const options = useSelector(selectOptions);
+    const [ colorScheme, setColorScheme ] = useState({});
 
-    const subTasksTotal = taskToBeRendered.subTasks.length;
-    const subTasksDone = taskToBeRendered.subTasks.filter(subTask => subTask.status === 'done').length;
-    // const subTasksDone = Object.values(taskToBeRendered.subTasks).find(subTask => subTask.status === 'done')
+    useEffect(() => {
 
+        if (options.nightMode) {
+            setColorScheme({'main':             allColorSchemes.main.nightMode,
+                            'buttonPrimary':    allColorSchemes.buttonPrimary.nightMode,
+                            'buttonSecondary':  allColorSchemes.buttonSecondary.nightMode,
+                            'label':            allColorSchemes.label.nightMode});
+        } else if (!options.nightMode) {
+            setColorScheme({'main':             allColorSchemes.main.dayMode,
+                            'buttonPrimary':    allColorSchemes.buttonPrimary.dayMode,
+                            'buttonSecondary':  allColorSchemes.buttonSecondary.nightMode,
+                            'label':            allColorSchemes.label.dayMode});
+        }
+
+    },[options.nightMode])
+
+
+    const subTasksTotal = allTasks[taskId].subTasks.length;
+    const subTasksDone = allTasks[taskId].subTasks.filter(subTask => subTask.status === 'done').length;
 
     return ( 
         <Link to={boardId + '/' + taskId + '/ShowTask'} style={{textDecoration: 'none'}}>
-            <div className='taskContainer'>
-                <h3>{taskToBeRendered.name}</h3>
+            <div className='taskContainer' style={colorScheme.main}>
+                <h3 style={colorScheme.main}>{allTasks[taskId].name}</h3>
                 <p>{subTasksDone} of {subTasksTotal} subtasks</p>
             </div>
         </Link>

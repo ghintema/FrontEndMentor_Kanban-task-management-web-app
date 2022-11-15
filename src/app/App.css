@@ -299,7 +299,7 @@ h1 {
     border-radius: 15px;
     /* border: 1px solid black;
     background-color: white; */
-    margin:10px;
+    margin:13px;
 }
 
 .columnContainer h4 {
@@ -318,7 +318,7 @@ h1 {
     border-radius: 8px;
     
     padding:23px 16px;
-    margin:10px 0;
+    margin:20px 0;
 }
 
 .taskContainer h3 {
@@ -383,7 +383,7 @@ label {
     font-size: 12px;
     font-weight: 700;
     color: #828FA3;
-    text-transform:capitalize;
+    
     margin-bottom: 7px;
 }
 
@@ -467,7 +467,7 @@ textarea {
 }
 .subTaskDone {
     text-decoration: line-through;
-    color: #828FA3;
+    color: #828FA3 !important;
 
 }
 
@@ -509,5 +509,6 @@ textarea {
     color: #635fc7;
     background-color: #efeff9;
 }
+
 
 

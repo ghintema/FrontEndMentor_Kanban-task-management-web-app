@@ -28,8 +28,8 @@ export const optionsSlice = createSlice({
         toggleNavVisibility(options, action) {
             options.navVisibility = !options.navVisibility;
         },
-        toggleLightMode(options, action) {
-            options.lightMode = !options.lightMode;
+        toggleNightMode(options, action) {
+            options.nightMode = !options.nightMode;
         }
     }
 })
@@ -52,5 +52,5 @@ export const {  setLightMode,
                 setSubMenuBoardVisibility,
                 setSubMenuTaskVisibility, 
                 toggleNavVisibility, 
-                toggleLightMode } = optionsSlice.actions
+                toggleNightMode } = optionsSlice.actions
 export default optionsSlice.reducer;

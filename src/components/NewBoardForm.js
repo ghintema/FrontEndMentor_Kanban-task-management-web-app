@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { addBoardToBoards } from '../features/boards/boardsSlice';
 import { addColumnToColumns } from '../features/columns/columnsSlice';
+import { selectOptions } from '../features/options/optionsSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import cross from '../assets/cross-icon.svg';
 import { useHistory } from 'react-router';
+import  { allColorSchemes }  from '../colorScheme';
 
 //first, collect all necessary data in lokal states. Those are: Name of the board and name of all columns in that board.
 //second, on submit, dispatch all actions to create the board and all the new columns
@@ -12,11 +14,34 @@ function NewBoardForm() {
 
     const dispatch = useDispatch();
     const history = useHistory();
-    const [nameForNewBoard, setNameForNewBoard] =       useState('New Board');
+    const options = useSelector(selectOptions);
+    const [ colorScheme, setColorScheme ]             = useState({});
+    const [nameForNewBoard, setNameForNewBoard]       = useState('New Board');
     const [namesForNewColumns, setNamesForNewColumns] = useState([{name: 'ToDo',  id:Math.floor(Math.random()*1000) },
                                                                   {name: 'Doing', id:Math.floor(Math.random()*1000) },
                                                                   {name: 'Done',  id:Math.floor(Math.random()*1000) }]);
     
+
+
+
+    useEffect(() => {
+
+        if (options.nightMode) {
+            setColorScheme({'main':             allColorSchemes.main.nightMode,
+                            'buttonPrimary':    allColorSchemes.buttonPrimary.nightMode,
+                            'buttonSecondary':  allColorSchemes.buttonSecondary.nightMode,
+                            'label':            allColorSchemes.label.nightMode});
+        } else if (!options.nightMode) {
+            setColorScheme({'main':             allColorSchemes.main.dayMode,
+                            'buttonPrimary':    allColorSchemes.buttonPrimary.dayMode,
+                            'buttonSecondary':  allColorSchemes.buttonSecondary.nightMode,
+                            'label':            allColorSchemes.label.dayMode});
+        }
+
+    },[options.nightMode])
+
+
+
 
     const changeColumnName = (e) => {
         const index = +e.target.id                   // the + in front of e.target.id converts string to number
@@ -60,7 +85,14 @@ function NewBoardForm() {
     }
 
     const closeTheForm = (e) => {
-        history.goBack()
+
+        // close the form on click of 'formBackground' or 'iconCross'
+        if (e.target.classList.contains('formBackground') ) {
+            history.goBack() // to close the form
+        }
+        if (e.target.classList.contains('closeTheForm') ) {
+            history.goBack() // to close the form
+        }
     }
 
 
@@ -72,13 +104,14 @@ function NewBoardForm() {
 
         // It's also important NOT to submit the form to prevent reload of the page.
     return ( 
-        <div className='formBackground' >
-            <div className='formContainer'>
-                <h3 className='formTitle'>Define a new Board here</h3>
+        <div className='formBackground' onClick={closeTheForm}>
+            <div className='formContainer' style={colorScheme.main}>
+                <h3 className='formTitle' style={colorScheme.main}>Define a new Board here</h3>
                 <form>
         	        
-                    <label for='boardNameInput'>Name</label>
-                    <input 
+                    <label htmlFor='boardNameInput' style={colorScheme.main}>Name</label>
+                    <input
+                        style={colorScheme.main} 
                         key = {33} //{Math.floor(Math.random()*1000)}
                         type='text'
                         id='boardNameInput'
@@ -86,13 +119,14 @@ function NewBoardForm() {
                         autoFocus
                         onChange={(e) => setNameForNewBoard(e.target.value)}
                     />
-                    <label id='columnLabel'>Columns</label>
+                    <label id='columnLabel' style={colorScheme.main}>Columns</label>
                     <ul>
                         {namesForNewColumns.map((column, index) => {
                             return (
                                 <li key={column.id + 0}>
                                     <input
                                         className='inputField subInput'
+                                        style={colorScheme.main}
                                         key = {column.id + 1}
                                         type='text'
                                         id={index}
@@ -113,7 +147,8 @@ function NewBoardForm() {
                         })}
                     </ul>
                     <button
-                        className = "formButton addNewButton" 	
+                        className = "formButton addNewButton"
+                        style={colorScheme.buttonSecondary} 	
                         type = "button"
                         key = {Math.floor(Math.random()*1000)}
                         onClick={addColumnName}>
@@ -121,6 +156,7 @@ function NewBoardForm() {
                     </button>
                     <button 
                         className = "formButton createNewButton"
+                        style={colorScheme.buttonPrimary}
                         type = "button"
                         key = {Math.floor(Math.random()*1000)}
                         onClick={createTheBoard}>
@@ -130,9 +166,8 @@ function NewBoardForm() {
                         className = "closingCrossButton closingFormButton"
                         type = "button"
                         key = {Math.floor(Math.random()*1000)}
-                        aria-label='close Form'
-                        onClick={closeTheForm}>
-                            <img src={cross} className='iconCross' alt=''/>
+                        aria-label='close Form'>
+                            <img src={cross} className='iconCross closeTheForm' alt=''/>
                     </button>
                 </form>
             </div>

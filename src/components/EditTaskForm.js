@@ -1,10 +1,11 @@
-import React from 'react';
-import { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams, useHistory } from 'react-router-dom';
 import { selectBoards } from '../features/boards/boardsSlice';
 import { selectColumns, addTaskIdToColumn, removeTaskIdFromColumn } from '../features/columns/columnsSlice';
 import { selectTasks, addTaskToTasks } from '../features/tasks/tasksSlice.js';
+import { selectOptions } from '../features/options/optionsSlice';
+import  { allColorSchemes }  from '../colorScheme';
 import cross from '../assets/cross-icon.svg';
 
 // The only adaptions from NewTaksForm -> EditTaskForm is
@@ -23,7 +24,9 @@ function EditTaskForm() {
     const allBoards = useSelector(selectBoards);
     const allColumns = useSelector(selectColumns);
     const allTasks = useSelector(selectTasks);
-    
+    const options = useSelector(selectOptions);
+    const [ colorScheme, setColorScheme ] = useState({});
+
     // initializing the local states with the existing values 
     // of the selected task to pre-fill the form and to preserv unchanged data
     const [presentTask, setPresentTask] = useState({name: allTasks[taskId].name, 
@@ -33,7 +36,26 @@ function EditTaskForm() {
                                             boardId: boardId,
                                             boardColumnIds: allTasks[taskId].boardColumnIds,
                                             subTasks: allTasks[taskId].subTasks})
-   
+
+    useEffect(() => {
+
+        if (options.nightMode) {
+            setColorScheme({'main':             allColorSchemes.main.nightMode,
+                            'main2':            allColorSchemes.main2.nightMode,
+                            'buttonPrimary':    allColorSchemes.buttonPrimary.nightMode,
+                            'buttonSecondary':  allColorSchemes.buttonSecondary.nightMode,
+                            'label':            allColorSchemes.label.nightMode});
+        } else if (!options.nightMode) {
+            setColorScheme({'main':             allColorSchemes.main.dayMode,
+                            'buttonPrimary':    allColorSchemes.buttonPrimary.dayMode,
+                            'buttonSecondary':  allColorSchemes.buttonSecondary.nightMode,
+                            'label':            allColorSchemes.label.dayMode});
+        }
+
+    },[options.nightMode])
+
+
+
     const changeTaskName = (e) => {
         const presentTaskCopy = {...presentTask};           // copy to prevent state-mutation
         presentTaskCopy.name = e.target.value;          // change the copy as needed.
@@ -103,13 +125,14 @@ function EditTaskForm() {
 
     return ( 
         <div className='formBackground' onClick={closeTheForm}>
-            <div className='formContainer' >
+            <div className='formContainer' style={colorScheme.main}>
                
-                <h3 className='formTitle'>Edit the Task here</h3>
+                <h3 className='formTitle' style={colorScheme.main}>Edit the Task here</h3>
                     <form>
         	        
-                        <label for='taskNameInput'>Name</label>
+                        <label htmlFor='taskNameInput'>Name</label>
                         <input 
+                            style={colorScheme.main}
                             key = {33} 
                             type='text'
                             id='taskNameInput'
@@ -117,8 +140,9 @@ function EditTaskForm() {
                             autoFocus
                             onChange={changeTaskName}
                         />
-                        <label for='descriptionInput'>description</label>
+                        <label htmlFor='descriptionInput'>description</label>
                         <textarea 
+                            style={colorScheme.main}
                             cols='20'
                             rows='3'
                             onChange={changeTaskDescription}>
@@ -131,6 +155,7 @@ function EditTaskForm() {
                                      <li key={subTask.id + 0}>
                                         <input
                                             className='inputField subInput'
+                                            style={colorScheme.main}
                                             key = {subTask.id + 1}
                                             type='text'
                                             id={index}
@@ -152,18 +177,24 @@ function EditTaskForm() {
                         </ul>
 
                         <button
-                            className = "formButton addNewButton" 	
+                            className = "formButton addNewButton" 
+                            style={colorScheme.buttonSecondary}	
                             type = "button"
                             key = {Math.floor(Math.random()*1000)}
                             onClick={addSubTask}>
                         Add more sub tasks
                         </button>
-                        <label for='selectStatus'>Status</label>
-                        <select id='selectStatus' className='selectStatus' onChange={choseTargetColumn}>
+                        <label htmlFor='selectStatus'>Status</label>
+                        <select 
+                            id='selectStatus' 
+                            className='selectStatus' 
+                            style={colorScheme.main}
+                            onChange={choseTargetColumn}>
                             {allBoards[boardId].columnIds.map(id => {
                                 return <option 
                                             key={id} id={id} 
                                             value={id}
+                                            style={colorScheme.main2}
                                             selected={id == presentTask.columnId ? true : false}>
                                             {allColumns[id].name}
                                         </option>
@@ -172,6 +203,7 @@ function EditTaskForm() {
 
                         <button 
                             className = "formButton createNewButton"
+                            style={colorScheme.buttonPrimary}
                             type = "button"
                             key = {Math.floor(Math.random()*1000)}
                             onClick={storeChanges}>

@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-const initialState = {'123': {name:'Platform Launch', id:'123', columnIds: []}};
+const initialState = {'123': {name:'Example Board', id:'123', columnIds: ['127', '128', '129']}};
 
 export const boardsSlice = createSlice({
     name: 'boards',

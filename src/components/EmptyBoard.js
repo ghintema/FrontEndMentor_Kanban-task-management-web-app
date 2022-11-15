@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom'
 import { useParams } from 'react-router'
 
@@ -8,6 +8,7 @@ function EmptyBoard() {
 
     const { boardId } = useParams() 
     const linkToEditBoard = boardId && /[0-9]/.test(boardId) ? `${boardId}/EditBoardForm` : '/EditBoardForm'
+    const [ colorScheme, setColorScheme ] = useState({});
 
     return ( 
         <div className='emptyBoardContainer'>

@@ -19,7 +19,8 @@ function SubMenu(props) {
     const { taskId } = useParams();
     const dispatch = useDispatch();
     const options = useSelector(selectOptions);
-    const [showSubMenu, setShowSubMenu] = useState(false);
+    const [ colorScheme, setColorScheme ] = useState({});
+    const [ showSubMenu, setShowSubMenu ] = useState(false);
     
 
     
@@ -35,6 +36,17 @@ function SubMenu(props) {
         }
     },[options])
     
+
+    useEffect(() => {
+        console.log(colorScheme)
+
+        if (options.nightMode) {
+            setColorScheme({backgroundColor:'#2b2c37'})
+        } else if (!options.nightMode) {
+            setColorScheme({})
+        }
+
+    },[options.nightMode])
     
     
     // const subMenuClassListVisible   = 'subMenuContainer subMenuVisible';
@@ -67,15 +79,20 @@ function SubMenu(props) {
             </button>
 
             <div className={showSubMenu ? 'subMenuContainer subMenuVisible' : 'subMenuContainer subMenuInvisible' }
-                aria-hidden={!showSubMenu}>
+                aria-hidden={!showSubMenu}
+                style={colorScheme}>
                 <Link className='subMenuButton' 
                         to={board ? `${boardId}/EditBoardForm` : `/${boardId}/${taskId}/EditTaskForm`} 
-                        onClick={() => dispatch(setSubMenuVisibility(false)) }>                        
+                        onClick={() => dispatch(setSubMenuVisibility(false)) }
+                        onMouseEnter={(e) => e.target.classList.add('navLinkHovered')}
+                        onMouseLeave={(e) => e.target.classList.remove('navLinkHovered')}>                        
                         { board ? 'Edit the Board' : 'Edit the Task'}
                 </ Link>
                 <Link className='subMenuButton' 
                         to={board ? `${boardId}/DeleteBoard` : `/${boardId}/${taskId}/DeleteTask` }
                         onClick={() => dispatch(setSubMenuVisibility(false)) }
+                        onMouseEnter={(e) => e.target.classList.add('navLinkHovered')}
+                        onMouseLeave={(e) => e.target.classList.remove('navLinkHovered')}
                         style={{color: 'red', fontWeight:'500'}} >
                         { board ? 'Delete the Board' : 'Delete the Task'}
                 </ Link>

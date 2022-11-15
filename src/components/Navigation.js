@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector, dispatch, useDispatch } from 'react-redux';
 import { selectBoards } from '../features/boards/boardsSlice';
 import { selectOptions } from '../features/options/optionsSlice';
-import { toggleNavVisibility, toggleLightMode} from '../features/options/optionsSlice';
-import { Link, NavLink, useParams } from 'react-router-dom';
-import { LinkToBoard } from './LinkToBoard';
+import { toggleNavVisibility, toggleNightMode} from '../features/options/optionsSlice';
+import { NavLink, useParams } from 'react-router-dom';
+import  { allColorSchemes }  from '../colorScheme';
 import iconBoard from '../assets/board-icon.svg';
 import iconClosedEye from '../assets/closed-eye-icon.svg';
 import iconOpenEye from '../assets/open-eye-icon.svg';
@@ -25,21 +25,53 @@ function Navigation() {
     const numOfBoards = Object.keys(allBoards).length;
     const { boardId } = useParams() 
     const dispatch = useDispatch();
+    const [ colorScheme, setColorScheme ] = useState({});
+
     const linkToCreateNewBoard = /[0-9]/.test(boardId) ? `${boardId}/NewBoardForm` : '/NewBoardForm'
 
+
+    // color-translation day and night:
+    // #f4f7fd -> #20122c
+    // #ffffff -> #2b2c37
+    // #000112 -> #cacacd
+    // 
+
+
+    useEffect(() => {
+
+        if (options.nightMode) {
+            setColorScheme({'main':             allColorSchemes.main.nightMode,
+                            'main2':            allColorSchemes.main2.nightMode,
+                            'buttonPrimary':    allColorSchemes.buttonPrimary.nightMode,
+                            'buttonSecondary':  allColorSchemes.buttonSecondary.nightMode,
+                            'label':            allColorSchemes.label.nightMode});
+        } else if (!options.nightMode) {
+            setColorScheme({'main':             allColorSchemes.main.dayMode,
+                            'main2':            allColorSchemes.main2.dayMode,
+                            'buttonPrimary':    allColorSchemes.buttonPrimary.dayMode,
+                            'buttonSecondary':  allColorSchemes.buttonSecondary.nightMode,
+                            'label':            allColorSchemes.label.dayMode});
+        }
+
+    },[options.nightMode])
 
     const hideNavigation = () => {
         console.log('hideNavigation invoked')
         dispatch(toggleNavVisibility())
     }
 
+    const controlNightMode = (e) => {
+        dispatch(toggleNightMode());
+    }
+
     let hover = false;
 
     return ( 
         <aside  className={options.navVisibility ?  'navigationContainer' : 'hideTheNav'}
+                style={colorScheme.main}
                 aria-hidden={!options.navVisibility}>
             <h4 className='navigationHeadline'>{`All Boards(${numOfBoards}) `}</h4>
-            <ul>
+            <ul role='presentation'>
             {Object.values(allBoards).map((board) => {
                 return  <li className='navItem' key={board.id}> 
                             <NavLink className='linkToExistingBoard'
@@ -64,10 +96,13 @@ function Navigation() {
             </li>
             </ul>
             
-            <div className='nightModeSliderContainer'>
+            <div className='nightModeSliderContainer'
+                 style={colorScheme.main2}>
                 <img src={iconSun} alt='' />
-                <label className="switch">
-                    <input type="checkbox"  />
+                <label className="switch" aria-label='switch night mode'>
+                    <input  type="checkbox" 
+                            onChange={controlNightMode}
+                             />
                     <span className="slider round"></span>
                 </label>
                 <img src={iconMoon} alt='' />

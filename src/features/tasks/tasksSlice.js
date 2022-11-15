@@ -1,13 +1,14 @@
 import { createSlice } from '@reduxjs/toolkit'
 
-const initialState = {'123': {name:'task name', 
-                              id:'123',
-                              description:'This is to be done', 
-                              columnId:'', 
-                              boardColumnIds:[''], 
-                              subTasks:[{name: 'sub task', 
-                              id:'321', 
-                              status: 'open'}]}};
+const initialState = {'456': {name:'Explore this App', 
+                              id:'456',
+                              description:'Have a look around this app and explore all the functionality.', 
+                              columnId:'127', 
+                              boardColumnIds:['127', '128', '129'], 
+                              subTasks:[{name: 'create your first own board', id:'321', status: 'open'},
+                                        {name: 'try to hide the nav', id:'322', status: 'open'},
+                                        {name: 'try the dark mode', id:'323', status: 'open'},
+                                        {name: 'try to delete or shift a task', id:'323', status: 'open'}]}};
 
 
 // every task has exactly and always ONE columnId (the one it is sittin on) but can have zero to whatever columnIds, wich are potential new target-columns insige the board. This is important as selection-options for a column change.

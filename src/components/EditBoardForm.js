@@ -4,38 +4,48 @@ import { useParams, useHistory } from 'react-router';
 import { selectBoards, addBoardToBoards } from '../features/boards/boardsSlice'
 import { selectColumns, addColumnToColumns } from '../features/columns/columnsSlice'
 import { selectTasks, addBoardColumnIdToTask } from '../features/tasks/tasksSlice';
+import { selectOptions } from '../features/options/optionsSlice';
 import cross from '../assets/cross-icon.svg';
+import { allColorSchemes }  from '../colorScheme';
 
 
 function EditBoardForm() {
 
+    
     const { boardId } = useParams();
     const allBoards = useSelector(selectBoards);
-    const presentBoard = allBoards[boardId];
     const allColumns = useSelector(selectColumns);
-    const allTasks = useSelector(selectTasks);
+    const allTasks = useSelector(selectTasks); // all of the boards tasks need be updated with the new columns.
+    const options = useSelector(selectOptions);
     const dispatch = useDispatch();
     const history = useHistory();
-    const [nameForBoard, setNameForBoard] =       useState('');
-    const [newColumnConfig, setnewColumnConfig] = useState([]);
 
-
-    // initializing the local states with the existing values 
-    // of the selected board to pre-fill the form and preserv unchanged data
-    useEffect(() => {
-        
-        setNameForBoard(allBoards[boardId].name);
-
-        // iterating over all existing columns of the selected board to collect the id, name and taskIds
-        
-        let initialColumns = [];
-        allBoards[boardId].columnIds.map(id => initialColumns.push({name: allColumns[id].name , 
-                                                                    id: id, 
-                                                                    taskIds: allColumns[id].taskIds }) )
-        setnewColumnConfig(initialColumns)
-
-    },[boardId])
+    let initialColumns = [];
+    allBoards[boardId].columnIds.map(id => initialColumns.push({name: allColumns[id].name , 
+                                                                id: id, 
+                                                                taskIds: allColumns[id].taskIds }) )
     
+    const [newColumnConfig, setnewColumnConfig] = useState(initialColumns);
+    const [nameForBoard, setNameForBoard]       = useState(allBoards[boardId].name);
+    const [ colorScheme, setColorScheme ]       = useState({});
+
+    
+    useEffect(() => {
+
+        if (options.nightMode) {
+            setColorScheme({'main':             allColorSchemes.main.nightMode,
+                            'main2':            allColorSchemes.main2.nightMode,
+                            'buttonPrimary':    allColorSchemes.buttonPrimary.nightMode,
+                            'buttonSecondary':  allColorSchemes.buttonSecondary.nightMode,
+                            'label':            allColorSchemes.label.nightMode});
+        } else if (!options.nightMode) {
+            setColorScheme({'main':             allColorSchemes.main.dayMode,
+                            'buttonPrimary':    allColorSchemes.buttonPrimary.dayMode,
+                            'buttonSecondary':  allColorSchemes.buttonSecondary.nightMode,
+                            'label':            allColorSchemes.label.dayMode});
+        }
+
+    },[options.nightMode])
 
 
     const changeColumnName = (e) => {
@@ -102,12 +112,13 @@ function EditBoardForm() {
 
     return ( 
         <div className='formBackground' onClick={closeTheForm}>
-            <div className='formContainer'>
-                <h3 className='formTitle'>Edit the Board</h3>
+            <div className='formContainer' style={colorScheme.main}>
+                <h3 className='formTitle' style={colorScheme.main}>Edit the Board</h3>
                 <form>
         	        
-                    <label for='boardNameInput'>Name</label>
+                    <label htmlFor='boardNameInput'>Name</label>
                     <input 
+                        style={colorScheme.main}
                         key = {33} //{Math.floor(Math.random()*1000)}
                         type='text'
                         id='boardNameInput'
@@ -121,6 +132,7 @@ function EditBoardForm() {
                                 <li key={column.id + 0}>
                                     <input
                                         className='inputField subInput'
+                                        style={colorScheme.main}
                                         key = {column.id + 1}
                                         type='text'
                                         id={index}
@@ -141,7 +153,8 @@ function EditBoardForm() {
                         })}
                     </ul>
                     <button
-                        className = "formButton addNewButton" 	
+                        className = "formButton addNewButton"
+                        style={colorScheme.buttonSecondary} 	
                         type = "button"
                         key = {Math.floor(Math.random()*1000)}
                         onClick={addColumnName}>
@@ -149,6 +162,7 @@ function EditBoardForm() {
                     </button>
                     <button 
                         className = "formButton createNewButton"
+                        style={colorScheme.buttonPrimary}
                         type = "button"
                         key = {Math.floor(Math.random()*1000)}
                         onClick={storeChanges}>
