@@ -1,0 +1,22 @@
+{
+  "files": {
+    "main.css": "/FrontEndMentor_Kanban-task-management-web-app/static/css/main.c585a7dc.css",
+    "main.js": "/FrontEndMentor_Kanban-task-management-web-app/static/js/main.c08d86c6.js",
+    "static/media/logo-dark.svg": "/FrontEndMentor_Kanban-task-management-web-app/static/media/logo-dark.4341f28b46a4286033a5d1759115fc0c.svg",
+    "static/media/logo-bright.svg": "/FrontEndMentor_Kanban-task-management-web-app/static/media/logo-bright.94faba57fa84d7644f768fd7b980295f.svg",
+    "static/media/sun-icon.svg": "/FrontEndMentor_Kanban-task-management-web-app/static/media/sun-icon.c303245dc8aa05a04b41f51c62eec178.svg",
+    "static/media/closed-eye-icon.svg": "/FrontEndMentor_Kanban-task-management-web-app/static/media/closed-eye-icon.4815bfbb98dc2c0ba7fa29e59592f154.svg",
+    "static/media/moon-icon.svg": "/FrontEndMentor_Kanban-task-management-web-app/static/media/moon-icon.e7f03f44d877a9b11b9d55a50d23c58c.svg",
+    "static/media/board-icon.svg": "/FrontEndMentor_Kanban-task-management-web-app/static/media/board-icon.30b35b894d8de090ea359ca7ca889749.svg",
+    "static/media/open-eye-icon.svg": "/FrontEndMentor_Kanban-task-management-web-app/static/media/open-eye-icon.3fb96529ecb60ee68751bdb5f3dccfde.svg",
+    "index.html": "/FrontEndMentor_Kanban-task-management-web-app/index.html",
+    "static/media/doener-icon.svg": "/FrontEndMentor_Kanban-task-management-web-app/static/media/doener-icon.a00ab688f243e2ee92980df8055bd1ec.svg",
+    "static/media/cross-icon.svg": "/FrontEndMentor_Kanban-task-management-web-app/static/media/cross-icon.69335a7eeaddd4ef30422f593d0e1443.svg",
+    "main.c585a7dc.css.map": "/FrontEndMentor_Kanban-task-management-web-app/static/css/main.c585a7dc.css.map",
+    "main.c08d86c6.js.map": "/FrontEndMentor_Kanban-task-management-web-app/static/js/main.c08d86c6.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.c585a7dc.css",
+    "static/js/main.c08d86c6.js"
+  ]
+}
