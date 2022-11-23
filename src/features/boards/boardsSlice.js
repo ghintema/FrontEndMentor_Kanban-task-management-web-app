@@ -1,6 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-const initialState = {'123': {name:'Example Board', id:'123', columnIds: ['127', '128', '129']}};
+const localStorageBoards = JSON.parse(localStorage.getItem('boards_123'));
+
+// const localStorageBoards = false; 
+const initialState = localStorageBoards || {'123': {name:'Example Board', id:'123', columnIds: ['127', '128', '129']}};
 
 export const boardsSlice = createSlice({
     name: 'boards',

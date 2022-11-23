@@ -59,8 +59,14 @@ function BoardHeader() {
     return (
       <div className='boardHeaderContainer' style={colorScheme.main}>
         <h1 style={colorScheme.main}>{title}</h1>
-        { boardIdPlausible  ? <Link className='noneFormButton createNewButton' to={`${boardId}/NewTaskForm`} style={colorScheme.buttonPrimary}>+ Add new Task</Link>
-                            : <Link className='noneFormButton createNewButton' to={'/'} style={{backgroundColor: '#d8d7f1', color:'#fff', cursor:'default'}}>+ Add new Task</Link>}
+        { boardIdPlausible  ? <Link className='noneFormButton createNewButton' 
+                                    to={`${boardId}/NewTaskForm`} 
+                                    style={colorScheme.buttonPrimary}
+                                    role='button'
+                                    aria-label='add new task'>+ Add new Task</Link>
+                            : <Link className='noneFormButton createNewButton' 
+                                    aria-disabled="true" to={'/'} 
+                                    style={{backgroundColor: '#d8d7f1', color:'#fff', cursor:'default'}}>+ Add new Task</Link>}
       
         {  boardIdPlausible  && <SubMenu useCase='board' top='50px' right='30px' />}
 

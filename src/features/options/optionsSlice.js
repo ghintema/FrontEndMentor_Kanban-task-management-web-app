@@ -1,9 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const initialState = {  nightMode: false, 
-                        navVisibility: true, 
-                        subMenuBoardVisiblity: false, 
-                        subMenuTaskVisiblity: false,};
+const localStorageOption = JSON.parse(localStorage.getItem('options_1234'))
+
+
+const initialState = localStorageOption || {nightMode: false, 
+                                            navVisibility: true, 
+                                            subMenuBoardVisiblity: false, 
+                                            subMenuTaskVisiblity: false,};
 
 export const optionsSlice = createSlice({
     name: 'options',

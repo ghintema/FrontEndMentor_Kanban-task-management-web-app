@@ -10,7 +10,11 @@ function NoBoard() {
     return ( 
         <div className='emptyBoardContainer'>
             <p>No Board selected. Select a Board or create a new one.</p>
-            <Link className='noneFormButton createNewButton' to='NewBoardForm'>+ Create new Board</Link>
+            <Link   className='noneFormButton createNewButton' 
+                    to='NewBoardForm'
+                    role='button'
+                    aria-label='create new board'>
+                        + Create new Board</Link>
         </div>
      );
 }

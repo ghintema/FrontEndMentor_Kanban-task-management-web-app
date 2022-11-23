@@ -8,6 +8,7 @@ import { Column } from '../columns/Column';
 import { EmptyBoard } from '../../components/EmptyBoard'
 import { NoBoard } from '../../components/NoBoard'
 import  { allColorSchemes }  from '../../colorScheme';
+import { selectTasks } from '../tasks/tasksSlice';
 
 // Look for the path for the id of the board wich is supposed to be shown.
 // If the board doesn't have any columns, then show message component <EmptyBoard /> 'the board is empty...' and button '+ Add new column' 
@@ -16,9 +17,11 @@ import  { allColorSchemes }  from '../../colorScheme';
 function Board() {
 
     const allBoards = useSelector(selectBoards);
+    const allColumns = useSelector(selectColumns);
+    const allTasks = useSelector(selectTasks)
+    const options = useSelector(selectOptions);
     const { boardId } = useParams()
     const dispatch = useDispatch();
-    const options = useSelector(selectOptions);
     const [ colorScheme, setColorScheme ] = useState({});
 
     useEffect(() => {
@@ -35,7 +38,14 @@ function Board() {
                             'label':            allColorSchemes.label.dayMode});
         }
 
-    },[options.nightMode])
+    },[options.nightMode]);
+
+    useEffect(() => {
+        localStorage.setItem('boards_123', JSON.stringify(allBoards));
+        localStorage.setItem('columns_456', JSON.stringify(allColumns));
+        localStorage.setItem('tasks_789', JSON.stringify(allTasks));
+        localStorage.setItem('options_1234', JSON.stringify(options))
+    },[allBoards, allColumns, allTasks, options])
    
 
     let columnsToBeRendered = []

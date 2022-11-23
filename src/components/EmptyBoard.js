@@ -13,7 +13,11 @@ function EmptyBoard() {
     return ( 
         <div className='emptyBoardContainer'>
             <p>This board is empty. Create a new column to get started.</p>
-            <Link className='noneFormButton createNewButton' to={linkToEditBoard}>+ Add new Column</Link>
+            <Link   className='noneFormButton createNewButton' 
+                    to={linkToEditBoard}
+                    role='button'
+                    aria-label='add new column'
+                        >+ Add new Column</Link>
         </div>
      );
 }

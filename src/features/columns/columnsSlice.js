@@ -1,8 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-const initialState = {'127': {name:'ToDo', id:'127', taskIds: ['456']},
-                      '128': {name:'Doing', id:'128', taskIds: []},
-                      '129': {name:'Done', id:'129', taskIds: []}}
+const localStorageColumns = JSON.parse(localStorage.getItem('columns_456'));
+
+
+const initialState = localStorageColumns || {'127': {name:'ToDo', id:'127', taskIds: ['456']},
+                                             '128': {name:'Doing', id:'128', taskIds: []},
+                                             '129': {name:'Done', id:'129', taskIds: []}}
 
 // taskIds carrys all tasks currently shown in this columns
 

@@ -112,6 +112,8 @@ function Navigation() {
             <button 
                 className={options.navVisibility ? 'buttonHideTheNavExtended' : 'buttonHideTheNavAbrigded'} 
                 onClick={hideNavigation}
+                aria-label={options.navVisibility ? 'hide navigation' : 'show navigation'}
+                aria-expanded= {options.navVisibility ? true : false}
                 onMouseEnter={(e) => {
                     if (options.navVisibility) {
                         e.target.classList.add('navLinkHovered')

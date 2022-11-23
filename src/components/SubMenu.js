@@ -65,11 +65,12 @@ function SubMenu(props) {
     }
 
     return ( 
-        <div style={{position: 'absolute', top:top, right:right}}>
+        <div style={{position: 'absolute', top:top, right:right}} role="presentation">
             <button
             className='buttonOpenSubMenu' 
             aria-label='open submenu'
             onClick={subMenuControl}
+            aria-expanded={showSubMenu}
             >
 
                 <img 
