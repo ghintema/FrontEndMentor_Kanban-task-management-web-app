@@ -35,12 +35,13 @@ Users should be able to:
 
 ### Screenshot
 
-![Screenshot desktop](./Screenshot-desktop.png)
+![Screenshot desktop](./screenshot-desktop.png)
 
 
 ### Links
 
-- Solution URL: [Add solution URL here](https://github.com/ghintema/FrontEndMentor_Kanban-task-management-web-app.git)
+- Solution URL: [Add solution URL here]()
+- Repository URL : [Add repository URL here](https://github.com/ghintema/FrontEndMentor_Kanban-task-management-web-app.git)
 - Live Site URL: [Add live site URL here](https://ghintema.github.io/FrontEndMentor_Kanban-task-management-web-app/)
 
 ## My process
@@ -50,6 +51,9 @@ Users should be able to:
     - What actions do I need to handel all the functionality?
 - implementing the basic business logik.
 - thinking and planing the component-tree.
+- building out all the components and features.
+- styling the app.
+- implementing localStorage
 
 
 ### Built with
@@ -83,7 +87,7 @@ Users should be able to:
                             history.goBack() // to close the form
                         }
                     }
-
+- using the localStorage Object to keep data when the page reloads.
 - using aria-hidden='true' for non visible dom-elements.
 
 
