@@ -17,12 +17,6 @@ import { DeleteTask } from '../components/DeleteTask.js'
 
 function App() {
 
-    // const history = useHistory();
-
-    // useEffect(() => {
-    //   history.push({ pathname: '/'});
-    // },[])
-
     return (
       <Router>
         <div className='Container'>
@@ -42,25 +36,25 @@ function App() {
           </main>
         </div>
 
-        <Route path="/:boardId?/NewBoardForm">
+        <Route path="/FrontEndMentor_Kanban-task-management-web-app/:boardId?/NewBoardForm">
           <NewBoardForm />
         </Route>
-        <Route path="/:boardId/EditBoardForm">
+        <Route path="/FrontEndMentor_Kanban-task-management-web-app/:boardId/EditBoardForm">
           <EditBoardForm />
         </Route>
-        <Route path="/:boardId/NewTaskForm">
+        <Route path="/FrontEndMentor_Kanban-task-management-web-app/:boardId/NewTaskForm">
           <NewTaskForm />
         </Route>
-        <Route path="/:boardId/DeleteBoard">
+        <Route path="/FrontEndMentor_Kanban-task-management-web-app/:boardId/DeleteBoard">
           <DeleteBoard />
         </Route>
-        <Route path="/:boardId/:taskId/DeleteTask">
+        <Route path="/FrontEndMentor_Kanban-task-management-web-app/:boardId/:taskId/DeleteTask">
           <DeleteTask />
         </Route>
-        <Route path="/:boardId/:taskId/ShowTask">
+        <Route path="/FrontEndMentor_Kanban-task-management-web-app/:boardId/:taskId/ShowTask">
           <ShowTask />
         </Route>
-        <Route path="/:boardId/:taskId/EditTaskForm">
+        <Route path="/FrontEndMentor_Kanban-task-management-web-app/:boardId/:taskId/EditTaskForm">
           <EditTaskForm />
         </Route>
       </Router>

@@ -57,7 +57,7 @@ function DeleteBoard() {
 
         dispatch(removeBoardFromBoards(boardId));
 
-        history.push('')
+        history.push('/FrontEndMentor_Kanban-task-management-web-app/')
 
 
     }

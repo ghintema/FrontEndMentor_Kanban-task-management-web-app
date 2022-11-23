@@ -81,7 +81,7 @@ function NewBoardForm() {
         })
 
 
-        history.push(`/${newBoardsId}`);        // close the form and show the newly created board
+        history.push(`/FrontEndMentor_Kanban-task-management-web-app/${newBoardsId}`);        // close the form and show the newly created board
     }
 
     const closeTheForm = (e) => {

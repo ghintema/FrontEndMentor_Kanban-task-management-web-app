@@ -50,7 +50,7 @@ function DeleteTask() {
         // updating the task-slice by removing the task.
         dispatch(removeTaskFromTasks(taskId))
 
-        history.push(`/${boardId}`)
+        history.push(`/FrontEndMentor_Kanban-task-management-web-app/${boardId}`)
 
     }
 
