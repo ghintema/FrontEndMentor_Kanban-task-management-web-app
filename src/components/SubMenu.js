@@ -83,14 +83,14 @@ function SubMenu(props) {
                 aria-hidden={!showSubMenu}
                 style={colorScheme}>
                 <Link className='subMenuButton' 
-                        to={board ? `${boardId}/EditBoardForm` : `/${boardId}/${taskId}/EditTaskForm`} 
+                        to={board ? `/FrontEndMentor_Kanban-task-management-web-app/${boardId}/EditBoardForm` : `/FrontEndMentor_Kanban-task-management-web-app/${boardId}/${taskId}/EditTaskForm`} 
                         onClick={() => dispatch(setSubMenuVisibility(false)) }
                         onMouseEnter={(e) => e.target.classList.add('navLinkHovered')}
                         onMouseLeave={(e) => e.target.classList.remove('navLinkHovered')}>                        
                         { board ? 'Edit the Board' : 'Edit the Task'}
                 </ Link>
                 <Link className='subMenuButton' 
-                        to={board ? `${boardId}/DeleteBoard` : `/${boardId}/${taskId}/DeleteTask` }
+                        to={board ? `/FrontEndMentor_Kanban-task-management-web-app/${boardId}/DeleteBoard` : `/FrontEndMentor_Kanban-task-management-web-app/${boardId}/${taskId}/DeleteTask` }
                         onClick={() => dispatch(setSubMenuVisibility(false)) }
                         onMouseEnter={(e) => e.target.classList.add('navLinkHovered')}
                         onMouseLeave={(e) => e.target.classList.remove('navLinkHovered')}
