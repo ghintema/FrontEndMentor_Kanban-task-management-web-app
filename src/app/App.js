@@ -22,15 +22,15 @@ function App() {
         <div className='Container'>
           <header className='headerContainer'>
             <Logo />
-            <Route path="/:boardId?">
+            <Route path="/FrontEndMentor_Kanban-task-management-web-app/:boardId?">
               <BoardHeader />
             </Route>
           </header>
           <main >
-              <Route path="/:boardId?">
+              <Route path="/FrontEndMentor_Kanban-task-management-web-app/:boardId?">
                 <Navigation />
               </Route>
-              <Route path="/:boardId?">
+              <Route path="/FrontEndMentor_Kanban-task-management-web-app/:boardId?">
                 <Board />
               </Route>
           </main>
