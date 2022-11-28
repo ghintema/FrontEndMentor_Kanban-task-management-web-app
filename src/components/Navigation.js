@@ -27,7 +27,7 @@ function Navigation() {
     const dispatch = useDispatch();
     const [ colorScheme, setColorScheme ] = useState({});
 
-    const linkToCreateNewBoard = /[0-9]/.test(boardId) ? `${boardId}/NewBoardForm` : '/NewBoardForm'
+    const linkToCreateNewBoard = /[0-9]/.test(boardId) ? `/${boardId}/NewBoardForm` : '/NewBoardForm'
 
 
     // color-translation day and night:
@@ -65,7 +65,6 @@ function Navigation() {
     }
 
     let hover = false;
-
     return ( 
         <aside  className={options.navVisibility ?  'navigationContainer' : 'hideTheNav'}
                 style={colorScheme.main}
@@ -78,7 +77,7 @@ function Navigation() {
                                     activeClassName='activelinkToExistingBoard' 
                                     onMouseEnter={(e) => e.target.classList.add('navLinkHovered')}
                                     onMouseLeave={(e) => e.target.classList.remove('navLinkHovered')}
-                                    to={board.id} key={board.id + 3}>
+                                    to={`/FrontEndMentor_Kanban-task-management-web-app/${board.id}`} key={board.id + 3}>
                                 <img src={iconBoard} className='iconBoard' key={board.id + 2} alt=''/>
 
                                 {board.name}
@@ -87,7 +86,7 @@ function Navigation() {
             })}
             <li className='navItem'>
                 <NavLink className='linkToCreateNewBoard'
-                        to= {linkToCreateNewBoard}
+                        to= {`/FrontEndMentor_Kanban-task-management-web-app${linkToCreateNewBoard}`}
                         onMouseEnter={(e) => e.target.classList.add('navLinkHovered')}
                         onMouseLeave={(e) => e.target.classList.remove('navLinkHovered')}>
                     <img src={iconBoard} className='iconBoard' key={33} alt=''/>

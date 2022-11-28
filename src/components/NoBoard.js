@@ -11,7 +11,7 @@ function NoBoard() {
         <div className='emptyBoardContainer'>
             <p>No Board selected. Select a Board or create a new one.</p>
             <Link   className='noneFormButton createNewButton' 
-                    to='NewBoardForm'
+                    to='/FrontEndMentor_Kanban-task-management-web-app/NewBoardForm'
                     role='button'
                     aria-label='create new board'>
                         + Create new Board</Link>
